@@ -1,0 +1,19 @@
+#!/usr/bin/env zsh
+
+set -exuo pipefail
+
+rm -f ~/.zcompdump
+chmod -R go-w "$(brew --prefix)/share"
+
+echo "Brewing..."
+brew bundle --no-lock --file ~/.Brewfile --quiet --zap
+
+$(brew --prefix)/opt/fzf/install \
+  --no-fish \
+  --no-bash \
+  --key-bindings \
+  --completion \
+  --no-update-rc
+
+# Rust
+curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --no-modify-path
