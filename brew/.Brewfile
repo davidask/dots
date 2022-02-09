@@ -20,5 +20,5 @@ brew "shfmt"
 brew "efm-langserver"
 brew "stylue"
 
-tap "epk/epk"
-cask "font-sf-mono-nerd-font"
+tap "homebrew/cask-fonts"
+cask "font-jetbrains-mono"

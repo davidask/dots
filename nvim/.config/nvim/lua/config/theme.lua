@@ -16,6 +16,7 @@ function M.setup()
   end
 
   M.set_color_scheme()
+  require("lualine").setup()
 end
 
 return M

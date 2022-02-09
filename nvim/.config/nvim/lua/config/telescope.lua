@@ -17,7 +17,7 @@ function M.setup()
         themes.get_dropdown({}),
       },
       file_browser = {
-        files = false,
+        path = "%:p:h",
         hidden = true,
       },
     },
@@ -40,11 +40,13 @@ function M.setup()
       },
     },
     defaults = {
+      winblend = 10,
       borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       mappings = {
         i = {
           ["<esc>"] = actions.close,
           ["<C-h>"] = "which_key",
+          ['<c-d>'] = require('telescope.actions').delete_buffer
         },
       },
       layout_config = { height = 0.75, width = 0.5 },

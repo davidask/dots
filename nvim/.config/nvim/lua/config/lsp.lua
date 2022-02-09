@@ -19,16 +19,17 @@ local on_attach = function(client, bufnr)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
+
   -- Mappings
   local which_key_opts = { noremap = true, silent = true, buffer = bufnr }
   whichkey.register({
     K = { "<cmd>lua vim.lsp.buf.hover()<CR>", "Show documentation for symbol" },
     g = {
       name = "LSP Goto",
-      d = { "<cmd>lua vim.lsp.buf.definition()<CR>", "LSP Definitions" },
-      D = { "<cmd>lua vim.lsp.buf.declaration()<CR>", "LSP Type Definitions" },
-      i = { "<cmd>lua vim.lsp.buf.implementation()<CR>", "LSP Implementations" },
-      r = { "<cmd>lua vim.lsp.buf.references()<CR>", "LSP References" },
+      d = { "<cmd>lua require('telescope.builtin').lsp_definitions()<CR>", "LSP Type Definitions" },
+      D = { "<cmd>lua require('telescope.builtin').lsp_type_definitions()<CR>", "LSP Type Definitions" },
+      i = { "<cmd>lua require('telescope.builtin').lsp_implementations()<CR>", "LSP Implementations" },
+      r = { "<cmd>lua require('telescope.builtin').lsp_references<CR>", "LSP References" },
       ["["] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Jump to previous error" },
       ["]"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Jump to next error" },
     },
@@ -36,7 +37,7 @@ local on_attach = function(client, bufnr)
     ["<leader>"] = {
       c = {
         name = "Code",
-        a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "LSP Code Actions" },
+        a = { "<cmd>lua require('telescope.builtin').lsp_code_actions()<CR>", "LSP Code Actions" },
         w = {
           name = "Workspaces",
           a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", "Add workspace folder" },

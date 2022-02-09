@@ -1,7 +1,7 @@
 [alias]
 
 	# View abbreviated SHA, description, and history graph of the latest 20 commits.
-	l = log --oneline --decorate --graph --all
+	l = log --oneline --decorate --graph
 
 	# View the current working tree status using the short format.
 	s = status
@@ -27,7 +27,9 @@
   	aa = add -A
 
 	# Switch to a branch, creating it if necessary.
-	co = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+	cof = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
+
+	co = checkout
 
 	# Show verbose output about tags, branches or remotes
 	tags = tag -l

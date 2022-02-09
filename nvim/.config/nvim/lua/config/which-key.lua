@@ -85,8 +85,8 @@ function M.setup()
     },
     ["<C-e>"] = { "<cmd>lua require('telescope').extensions.file_browser.file_browser()<CR>", "Find file" },
     ["<C-b>"] = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
-    ["<tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
-    ["<S-tab>"] = { "<cmd>bprevious<CR>", "Previous buffer" },
+    -- ["<tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
+    -- ["<S-tab>"] = { "<cmd>bprevious<CR>", "Previous buffer" },
   }
 
   whichkey.register(normal_binds, { prefix = "<leader>", mode = "n", silent = true })

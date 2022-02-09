@@ -232,8 +232,6 @@ return require("packer").startup({
     -- GitHub extension for fugitive.vim
     use("tpope/vim-rhubarb")
 
-    use("tpope/vim-vinegar")
-
     --  Quoting/parenthesizing made simple
     use("tpope/vim-surround")
 
@@ -294,7 +292,6 @@ return require("packer").startup({
         "jose-elias-alvarez/null-ls.nvim",
         "jose-elias-alvarez/nvim-lsp-ts-utils",
       },
-      after = { "which-key.nvim" },
     })
 
     use({
