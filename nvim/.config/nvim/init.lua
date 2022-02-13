@@ -111,6 +111,7 @@ vim.cmd([[
 
 -- Auto reload buffers when changed outside of Vim
 vim.opt.autoread = true
+vim.cmd("autocmd CursorHold * checktime ")
 
 vim.cmd([[
   au FocusGained * :checktime
