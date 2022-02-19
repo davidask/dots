@@ -19,7 +19,6 @@ brew "llvm"
 brew "shfmt"
 brew "efm-langserver"
 brew "stylua"
-brew "pyenv"
 
 tap "homebrew/cask-fonts"
 cask "font-jetbrains-mono"

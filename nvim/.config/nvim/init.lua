@@ -11,7 +11,6 @@ if not packer_plugins then
   vim.opt.fileencoding = "utf-8"
   vim.opt.compatible = false
 end
-
 vim.opt.path:append({ "**" })
 vim.opt.wildmode = { "longest", "list", "full" }
 vim.opt.wildmenu = true
@@ -44,10 +43,6 @@ vim.opt.hlsearch = true
 -- Clipboard
 vim.opt.clipboard = "unnamedplus"
 
--- -- Shorter messages
--- vim.opt.shortmess:append({ c = true })
--- vim.opt.cmdheight = 2
-
 -- Indent Settings
 vim.opt.expandtab = true
 vim.opt.shiftwidth = 2
@@ -56,7 +51,7 @@ vim.opt.softtabstop = 2
 vim.opt.smartindent = true
 
 -- Completion
-vim.opt.completeopt = "menu,menuone,noselect"
+vim.opt.completeopt = { "menu", "menuone", "noselect" }
 
 --  No annoying sound on errors
 vim.opt.errorbells = false

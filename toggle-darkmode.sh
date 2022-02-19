@@ -1,9 +1,6 @@
 #!/usr/bin/env sh
 
 # This is stupid
-
-set -x
-
 ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.yml"
 
 LIGHT="colors: *light"
@@ -19,6 +16,9 @@ function replace() {
 
 if grep -Fq "$LIGHT" "$ALACRITTY_CONFIG"; then
   replace "$LIGHT" "$DARK"
+  osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to true"
 else
+  osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
   replace "$DARK" "$LIGHT"
 fi
+tmux source-file ~/.tmux.conf

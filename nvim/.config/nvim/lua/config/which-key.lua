@@ -47,7 +47,6 @@ function M.setup()
     },
     ["<space>"] = {
       "<cmd>lua require('telescope.builtin').find_files()<CR>",
-      -- "<cmd>lua if not pcall(require('telescope.builtin').git_files, {}) then require('telescope.builtin').find_files() end<CR>",
       "Find file in project",
     },
     [","] = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
@@ -85,8 +84,6 @@ function M.setup()
     },
     ["<C-e>"] = { "<cmd>lua require('telescope').extensions.file_browser.file_browser()<CR>", "Find file" },
     ["<C-b>"] = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
-    -- ["<tab>"] = { "<cmd>bnext<CR>", "Next buffer" },
-    -- ["<S-tab>"] = { "<cmd>bprevious<CR>", "Previous buffer" },
   }
 
   whichkey.register(normal_binds, { prefix = "<leader>", mode = "n", silent = true })

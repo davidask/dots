@@ -22,9 +22,9 @@ function M.setup()
     silent = true,
   })
 
-key_map("t", "<C-\\><C-w>", "<C-\\><C-n>", {
-  noremap = true,
-})
+  key_map("t", "<C-[><C-[>", "<C-\\><C-n>", {
+    noremap = true,
+  })
 end
 
 return M

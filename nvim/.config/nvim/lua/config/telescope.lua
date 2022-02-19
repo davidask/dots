@@ -28,15 +28,13 @@ function M.setup()
       find_files = {
         hidden = true,
         previewer = false,
-        -- find_command = {
-        --   "fd",
-        --   "--type",
-        --   "f",
-        --   "--no-ignore-vcs",
-        --   "--color=never",
-        --   "--hidden",
-        --   "--follow",
-        -- },
+      },
+      buffers = {
+        mappings = {
+          i = {
+            ["<c-d>"] = require("telescope.actions").delete_buffer,
+          },
+        },
       },
     },
     defaults = {
@@ -44,9 +42,9 @@ function M.setup()
       borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       mappings = {
         i = {
-          ["<esc>"] = actions.close,
+          -- ["<esc>"] = actions.close,
           ["<C-h>"] = "which_key",
-          ['<c-d>'] = require('telescope.actions').delete_buffer
+          ["<C-s>"] = actions.select_horizontal,
         },
       },
       layout_config = { height = 0.75, width = 0.5 },
@@ -67,7 +65,7 @@ function M.setup()
       color_devicons = true,
       file_ignore_patterns = {
         ".git/",
-        "node_modules/"
+        "node_modules/",
       },
     },
   })
