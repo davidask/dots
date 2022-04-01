@@ -17,3 +17,7 @@ $(brew --prefix)/opt/fzf/install \
 
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --no-modify-path
+
+# https://dhwaneetbhatt.com/blog/run-docker-without-docker-desktop-on-macos
+eval $(minikube docker-env)
+echo "`minikube ip` docker.local" | sudo tee -a /etc/hosts > /dev/null

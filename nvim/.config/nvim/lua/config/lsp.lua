@@ -19,7 +19,6 @@ local on_attach = function(client, bufnr)
   vim.lsp.handlers["textDocument/signatureHelp"] = vim.lsp.with(vim.lsp.handlers.hover, { border = "single" })
   buf_set_option("omnifunc", "v:lua.vim.lsp.omnifunc")
 
-
   -- Mappings
   local which_key_opts = { noremap = true, silent = true, buffer = bufnr }
   whichkey.register({
@@ -33,7 +32,6 @@ local on_attach = function(client, bufnr)
       ["["] = { "<cmd>lua vim.diagnostic.goto_prev()<CR>", "Jump to previous error" },
       ["]"] = { "<cmd>lua vim.diagnostic.goto_next()<CR>", "Jump to next error" },
     },
-    ["<leader>rn"] = { "<cmd>lua vim.lsp.buf.rename()<CR>", "LSP Rename" },
     ["<leader>"] = {
       c = {
         name = "Code",
@@ -55,17 +53,18 @@ local on_attach = function(client, bufnr)
           "Show diagnostics for line",
         },
       },
+      r = { "<cmd>lua vim.lsp.buf.rename()<CR>", "LSP Rename" },
     },
   }, which_key_opts)
 
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
     whichkey.register({
-      ["F"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format buffer" },
+      ["<leader>ff"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format buffer" },
     }, which_key_opts)
   elseif client.resolved_capabilities.document_range_formatting then
     whichkey.register({
-      ["F"] = { "<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format buffer/region" },
+      ["<leader>ff"] = { "<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format buffer/region" },
     }, which_key_opts)
   end
 end
@@ -176,9 +175,8 @@ function M.setup()
           },
         },
       }
-
     end
-      server:setup(opts)
+    server:setup(opts)
   end)
 
   local null_ls = require("null-ls")
@@ -195,7 +193,10 @@ function M.setup()
       null_ls.builtins.formatting.prettier.with({ prefer_local = "node_modules/.bin" }),
       null_ls.builtins.formatting.prettierd.with({ only_local = "node_modules/.bin" }),
       null_ls.builtins.formatting.stylua,
-      null_ls.builtins.formatting.shfmt
+      null_ls.builtins.formatting.shfmt,
+      null_ls.builtins.diagnostics.shellcheck,
+      null_ls.builtins.formatting.sqlformat,
+      null_ls.builtins.formatting.fish_indent,
     },
   })
 

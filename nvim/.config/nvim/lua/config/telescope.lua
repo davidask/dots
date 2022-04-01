@@ -19,15 +19,34 @@ function M.setup()
       file_browser = {
         path = "%:p:h",
         hidden = true,
+        respect_gitignore = false,
+        file_ignore_patterns = {
+          ".git/",
+        },
       },
     },
     pickers = {
       lsp_code_actions = {
         theme = "cursor",
       },
+      lsp_definitions = {
+        hidden = true,
+        -- Be explicit here, not to ignore e.g. `node_modules`
+        file_ignore_patterns = {
+          ".git/",
+        },
+      },
+      lsp_type_definitions = {
+        hidden = true,
+        -- Be explicit here, not to ignore e.g. `node_modules`
+        file_ignore_patterns = {
+          ".git/",
+        },
+      },
       find_files = {
         hidden = true,
         previewer = false,
+        shorten_path = true
       },
       buffers = {
         mappings = {
@@ -43,11 +62,13 @@ function M.setup()
       mappings = {
         i = {
           -- ["<esc>"] = actions.close,
-          ["<C-h>"] = "which_key",
+          ["<C-k>"] = "which_key",
           ["<C-s>"] = actions.select_horizontal,
         },
+        n = {
+          ["<C-k>"] = "which_key",
+        },
       },
-      layout_config = { height = 0.75, width = 0.5 },
       vimgrep_arguments = {
         "rg",
         "--color=never",

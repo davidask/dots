@@ -3,8 +3,6 @@ local M = {}
 function M.setup()
   local key_map = vim.api.nvim_set_keymap
 
-  key_map("", "<Space>", "<Nop>", { noremap = true, silent = true })
-
   key_map("n", "<C-j>", "<C-W>j", {
     noremap = true,
     silent = true,
@@ -22,7 +20,7 @@ function M.setup()
     silent = true,
   })
 
-  key_map("t", "<C-[><C-[>", "<C-\\><C-n>", {
+  key_map("t", "<C-\\><C-w>", "<C-\\><C-n>", {
     noremap = true,
   })
 end

@@ -45,14 +45,21 @@ function M.setup()
       name = "Open",
       gh = { "<cmd>!gh pr view --web || gh repo view --web<CR><CR>", "GitHub open" },
     },
-    ["<space>"] = {
-      "<cmd>lua require('telescope.builtin').find_files()<CR>",
-      "Find file in project",
+    g = {
+      b = {
+        "<cmd>lua require('telescope.builtin').git_branches()<CR>",
+        "Git branches",
+      },
+      s = {
+        "<cmd>lua require('telescope.builtin').git_status()<CR>",
+        "Git status",
+      },
+      c = {
+        "<cmd>lua require('telescope.builtin').git_commits()<CR>",
+        "Git commits",
+      },
     },
-    [","] = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
-    ["."] = { "<cmd>lua require('telescope').extensions.file_browser.file_browser()<CR>", "Find file" },
-    ["/"] = { "<cmd>Telescope live_grep<CR>", "Search in project" },
-    ["<CR>"] = { "<cmd>nohl<CR>", "Turn off search highlight" },
+    ["<space>"] = { "<cmd>nohl<CR>", "Turn off search highlight" },
   }
 
   local visual_binds = {
@@ -63,13 +70,6 @@ function M.setup()
       },
     },
   }
-
-  if vim.fn.has("mac") == 1 then
-    normal_binds.o.o = {
-      string.format("<cmd>silent !open -a Finder.app %s<CR>", vim.fn.expand("%:p:h")),
-      "Open directory in Finder",
-    }
-  end
 
   local direct_binds = {
     ["<F5>"] = { "<cmd>lua require'dap'.continue()<CR>", "DAP Continue" },

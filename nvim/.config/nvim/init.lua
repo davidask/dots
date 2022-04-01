@@ -3,8 +3,6 @@ local fn = vim.fn
 -- Only run these settings once
 if not packer_plugins then
   require("config.mappings").setup()
-  vim.g.mapleader = " "
-  vim.g.maplocalleader = " "
   vim.opt.termguicolors = true
   vim.opt.clipboard = "unnamed"
   vim.opt.encoding = "utf-8"
@@ -27,6 +25,8 @@ vim.opt.undofile = true
 vim.opt.undodir = fn.stdpath("data") .. "undo"
 vim.opt.shell = "/bin/zsh"
 vim.opt.cursorline = false
+
+-- vim.opt.equalalways = false
 
 -- Line Numbers
 vim.opt.number = true
@@ -156,13 +156,13 @@ return require("packer").startup({
       end,
     })
 
-    use({
-      "windwp/nvim-autopairs",
-      config = function()
-        require("nvim-autopairs").setup({ map_cr = true })
-      end,
-      modue = "nvim-autopairs",
-    })
+    -- use({
+    --   "windwp/nvim-autopairs",
+    --   config = function()
+    --     require("nvim-autopairs").setup({ map_cr = true })
+    --   end,
+    --   modue = "nvim-autopairs",
+    -- })
 
     use({
       "folke/todo-comments.nvim",
@@ -229,7 +229,7 @@ return require("packer").startup({
     use("tpope/vim-rhubarb")
 
     --  Quoting/parenthesizing made simple
-    use("tpope/vim-surround")
+    use("machakann/vim-sandwich")
 
     use({ "tpope/vim-dispatch", opt = true, cmd = { "Dispatch", "Make", "Focus", "Start" } })
 
@@ -312,16 +312,16 @@ return require("packer").startup({
       },
     })
 
-    use({
-      "stevearc/dressing.nvim",
-      config = function()
-        require("dressing").setup({
-          input = {
-            default_prompt = "❯ ",
-          },
-        })
-      end,
-    })
+    -- use({
+    --   "stevearc/dressing.nvim",
+    --   config = function()
+    --     require("dressing").setup({
+    --       input = {
+    --         default_prompt = "❯ ",
+    --       },
+    --     })
+    --   end,
+    -- })
 
     -- -- -- Faster-than-light jumping
     -- -- use("ggandor/lightspeed.nvim")
