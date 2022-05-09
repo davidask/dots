@@ -35,7 +35,7 @@ local on_attach = function(client, bufnr)
     ["<leader>"] = {
       c = {
         name = "Code",
-        a = { "<cmd>lua require('telescope.builtin').lsp_code_actions()<CR>", "LSP Code Actions" },
+        a = { "<cmd>lua vim.lsp.buf.code_action()<CR>", "LSP Code Actions" },
         w = {
           name = "Workspaces",
           a = { "<cmd>lua vim.lsp.buf.add_workspace_folder()<CR>", "Add workspace folder" },
@@ -49,7 +49,7 @@ local on_attach = function(client, bufnr)
           },
         },
         x = {
-          "<cmd>lua vim.diagnostic.open_float(nil, { focusable = false })<CR>",
+          "<cmd>lua vim.diagnostic.open_float(nil, { focusable = false, source = true })<CR>",
           "Show diagnostics for line",
         },
       },
@@ -60,11 +60,11 @@ local on_attach = function(client, bufnr)
   -- Set some keybinds conditional on server capabilities
   if client.resolved_capabilities.document_formatting then
     whichkey.register({
-      ["<leader>ff"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format buffer" },
+      ["<leader>bf"] = { "<cmd>lua vim.lsp.buf.formatting()<CR>", "Format buffer" },
     }, which_key_opts)
   elseif client.resolved_capabilities.document_range_formatting then
     whichkey.register({
-      ["<leader>ff"] = { "<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format buffer/region" },
+      ["<leader>bf"] = { "<cmd>lua vim.lsp.buf.range_formatting()<CR>", "Format buffer/region" },
     }, which_key_opts)
   end
 end
@@ -89,16 +89,16 @@ function M.setup()
 
     -- (optional) Customize the options passed to the server
     if server.name == "rust_analyzer" then
-      opts.standalone = false
+      opts.standalone = true
 
-      local dbg_path = require("dap-install.config.settings").options["installation_path"] .. "codelldb/extension/"
-      local codelldb_path = dbg_path .. "adapter/codelldb"
-      local liblldb_path = dbg_path .. "lldb/lib/liblldb.dylib"
+      -- local dbg_path = require("dap-install.config.settings").options["installation_path"] .. "codelldb/extension/"
+      -- local codelldb_path = dbg_path .. "adapter/codelldb"
+      -- local liblldb_path = dbg_path .. "lldb/lib/liblldb.dylib"
 
       require("rust-tools").setup({
-        dap = {
-          adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
-        },
+        -- dap = {
+        --   adapter = require("rust-tools.dap").get_codelldb_adapter(codelldb_path, liblldb_path),
+        -- },
         server = vim.tbl_deep_extend("force", server:get_default_options(), opts),
       })
       server:attach_buffers()
@@ -184,12 +184,6 @@ function M.setup()
   null_ls.setup({
     on_attach = on_attach,
     sources = {
-      null_ls.builtins.diagnostics.eslint.with({
-        prefer_local = "node_modules/.bin",
-      }),
-      null_ls.builtins.diagnostics.eslint_d.with({
-        only_local = "node_modules/.bin",
-      }),
       null_ls.builtins.formatting.prettier.with({ prefer_local = "node_modules/.bin" }),
       null_ls.builtins.formatting.prettierd.with({ only_local = "node_modules/.bin" }),
       null_ls.builtins.formatting.stylua,

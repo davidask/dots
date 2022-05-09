@@ -26,9 +26,6 @@ function M.setup()
       },
     },
     pickers = {
-      lsp_code_actions = {
-        theme = "cursor",
-      },
       lsp_definitions = {
         hidden = true,
         -- Be explicit here, not to ignore e.g. `node_modules`
@@ -45,7 +42,6 @@ function M.setup()
       },
       find_files = {
         hidden = true,
-        previewer = false,
         shorten_path = true
       },
       buffers = {
@@ -57,7 +53,7 @@ function M.setup()
       },
     },
     defaults = {
-      winblend = 10,
+      winblend = 0,
       borderchars = { "─", "│", "─", "│", "┌", "┐", "┘", "└" },
       mappings = {
         i = {
@@ -93,7 +89,7 @@ function M.setup()
 
   telescope.load_extension("fzf")
   telescope.load_extension("ui-select")
-  telescope.load_extension("dap")
+  -- telescope.load_extension("dap")
   telescope.load_extension("gh")
 end
 

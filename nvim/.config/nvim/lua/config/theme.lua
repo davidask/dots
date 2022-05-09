@@ -6,12 +6,15 @@ function M.setup()
 
   function M.set_color_scheme()
     vim.cmd([[
+        let g:everforest_background = 'hard'
+        let g:everforest_enable_italic = 1
+        let g:everforest_sign_column_background = 'none'
         if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
             set background=dark
         else
             set background=light
         endif
-        colorscheme tokyonight
+        colorscheme everforest
     ]])
   end
 

@@ -27,6 +27,7 @@ vim.opt.shell = "/bin/zsh"
 vim.opt.cursorline = false
 
 -- vim.opt.equalalways = false
+vim.opt.laststatus=3
 
 -- Line Numbers
 vim.opt.number = true
@@ -126,13 +127,20 @@ return require("packer").startup({
     -- Packer (needed to manage packer packages to manage packages to manage...)
     use("wbthomason/packer.nvim")
 
-    -- Theme
     use({
       "folke/tokyonight.nvim",
       requires = "folke/lsp-colors.nvim",
+    })
+
+    use({
+      "sainnhe/everforest",
       config = function()
         require("config.theme").setup()
       end,
+    })
+
+    use({
+      "NLKNguyen/papercolor-theme",
     })
 
     use({
@@ -201,7 +209,7 @@ return require("packer").startup({
         { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
         "nvim-telescope/telescope-ui-select.nvim",
         "nvim-telescope/telescope-file-browser.nvim",
-        "nvim-telescope/telescope-dap.nvim",
+        -- "nvim-telescope/telescope-dap.nvim",
         "nvim-telescope/telescope-github.nvim",
         "kyazdani42/nvim-web-devicons",
       },
@@ -257,24 +265,18 @@ return require("packer").startup({
       requires = "nvim-lua/plenary.nvim",
     })
 
-    use({
-      "mfussenegger/nvim-dap",
-      config = function()
-        require("config.dap").setup()
-        -- require("nvim-dap-virtual-text").setup()
-      end,
-      module = "dap",
-      requires = { "jbyuki/one-small-step-for-vimkind", "theHamsta/nvim-dap-virtual-text" },
-    })
+    -- use({
+    --   "mfussenegger/nvim-dap",
+    --   config = function()
+    --     require("config.dap").setup()
+    --     -- require("nvim-dap-virtual-text").setup()
+    --   end,
+    --   module = "dap",
+    --   requires = { "jbyuki/one-small-step-for-vimkind", "theHamsta/nvim-dap-virtual-text" },
+    -- })
 
-    -- UI for above
-    use({ "rcarriga/nvim-dap-ui", module = "dapui" })
-
-    -- EZ installer for DAP servers
-    use({
-      "Pocco81/DAPInstall.nvim",
-      module = "dap-install",
-    })
+    -- -- UI for above
+    -- use({ "rcarriga/nvim-dap-ui", module = "dapui" })
 
     -- Fancy IDE stuff
     use({

@@ -16,6 +16,7 @@ function M.setup()
       d = { "<cmd>bdelete<CR>", "Kill buffer" },
       p = { "<cmd>bp<CR>", "Previous buffer" },
       n = { "<cmd>bn<CR>", "Next buffer" },
+      l = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
     },
     d = {
       b = { "<cmd>lua require'dap'.toggle_breakpoint()<CR>", "Toggle breakpoint" },
@@ -59,7 +60,10 @@ function M.setup()
         "Git commits",
       },
     },
-    ["<space>"] = { "<cmd>nohl<CR>", "Turn off search highlight" },
+    ["\\"] = { "<cmd>nohl<CR>", "Turn off search highlight" },
+    ["]"] = { ":tabnext<CR>", "Next tab" },
+    ["["] = { ":tabprev<CR>", "Previous tab" },
+    ["t"] = { ":tabnew<CR>", "New tab tab" },
   }
 
   local visual_binds = {
@@ -72,6 +76,7 @@ function M.setup()
   }
 
   local direct_binds = {
+    ["<esc>"] = { "<cmd>nohl<CR>", "Turn off search highlight" },
     ["<F5>"] = { "<cmd>lua require'dap'.continue()<CR>", "DAP Continue" },
     ["<F10>"] = { "<cmd>lua require'dap'.step_over()<CR>", "DAP Step over" },
     ["<F11>"] = { "<cmd>lua require'dap'.step_into()<CR>", "DAP Step into" },
@@ -83,7 +88,6 @@ function M.setup()
       "Find file in project",
     },
     ["<C-e>"] = { "<cmd>lua require('telescope').extensions.file_browser.file_browser()<CR>", "Find file" },
-    ["<C-b>"] = { "<cmd>Telescope buffers<CR>", "Switch buffer" },
   }
 
   whichkey.register(normal_binds, { prefix = "<leader>", mode = "n", silent = true })
