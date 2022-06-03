@@ -117,10 +117,10 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: JetBrains Mono
+    family: Hack Nerd Font Mono
 
     # The `style` can be specified to pick a specific face.
-    style: ExtraLight
+    style: Regular
 
   # Bold font face
   bold:
@@ -131,7 +131,7 @@ font:
     #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Light
+    style: Bold
 
   # Italic font face
   italic:
@@ -142,7 +142,7 @@ font:
     #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: ExtraLight Italic
+    style: Italic
 
   # Bold italic font face
   bold_italic:
@@ -153,7 +153,7 @@ font:
     #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Medium Italic
+    style: Bold Italic
 
   # Point size
   size: 12.0
@@ -186,51 +186,77 @@ draw_bold_text_with_bright_colors: true
 schemes:
   dark: &dark
     primary:
-      background: '#2b3339'
-      foreground: '#d3c6aa'
+      background: "0x232136"
+      foreground: "0xe0def4"
+    line_indicator:
+      foreground: None
+      background: None
+    selection:
+      text: "0xe0def4"
+      background: "0x44415a"
     normal:
-      black:   '#4b565c'
-      red:     '#e67e80'
-      green:   '#a7c080'
-      yellow:  '#dbbc7f'
-      blue:    '#7fbbb3'
-      magenta: '#d699b6'
-      cyan:    '#83c092'
-      white:   '#d3c6aa'
+      black: "0x393552"
+      red: "0xeb6f92"
+      green: "0x3e8fb0"
+      yellow: "0xf6c177"
+      blue: "0x9ccfd8"
+      magenta: "0xc4a7e7"
+      cyan: "0xea9a97"
+      white: "0xe0def4"
     bright:
-      black:   '#4b565c'
-      red:     '#e67e80'
-      green:   '#a7c080'
-      yellow:  '#dbbc7f'
-      blue:    '#7fbbb3'
-      magenta: '#d699b6'
-      cyan:    '#83c092'
-      white:   '#d3c6aa'
+      black: "0x6e6a86"
+      red: "0xeb6f92"
+      green: "0x3e8fb0"
+      yellow: "0xf6c177"
+      blue: "0x9ccfd8"
+      magenta: "0xc4a7e7"
+      cyan: "0xea9a97"
+      white: "0xe0def4"
+    hints:
+      start:
+        foreground: "#908caa"
+        background: "#2a273f"
+      end:
+        foreground: "#6e6a86"
+        background: "#2a273f"
 
   light: &light
     primary:
-      background: '#fff9e8'
-      foreground: '#5c6a72'
+      background: "0xfaf4ed"
+      foreground: "0x575279"
+    line_indicator:
+      foreground: None
+      background: None
+    selection:
+      text: "0x575279"
+      background: "0xdfdad9"
     normal:
-      black:   '#5c6a72'
-      red:     '#f85552'
-      green:   '#8da101'
-      yellow:  '#dfa000'
-      blue:    '#3a94c5'
-      magenta: '#df69ba'
-      cyan:    '#35a77c'
-      white:   '#dfddc8'
+      black: "0xf2e9e1"
+      red: "0xb4637a"
+      green: "0x286983"
+      yellow: "0xea9d34"
+      blue: "0x56949f"
+      magenta: "0x907aa9"
+      cyan: "0xd7827e"
+      white: "0x575279"
     bright:
-      black:   '#5c6a72'
-      red:     '#f85552'
-      green:   '#8da101'
-      yellow:  '#dfa000'
-      blue:    '#3a94c5'
-      magenta: '#df69ba'
-      cyan:    '#35a77c'
-      white:   '#dfddc8'
+      black: "0x9893a5"
+      red: "0xb4637a"
+      green: "0x286983"
+      yellow: "0xea9d34"
+      blue: "0x56949f"
+      magenta: "0x907aa9"
+      cyan: "0xd7827e"
+      white: "0x575279"
+    hints:
+      start:
+        foreground: "#797593"
+        background: "#fffaf3"
+      end:
+        foreground: "#9893a5"
+        background: "#fffaf3"
 
-colors: *dark
+colors: *light
 
 # Bell
 #
@@ -644,7 +670,8 @@ alt_send_esc: true
 #
 # If the same trigger is assigned to multiple actions, all of them are executed
 # in the order they were defined in.
-# key_bindings:
+key_bindings:
+- { key: Space, mods: Control, chars: "\x00" } # Required for Nvim <C-Space>
 #   - { key: A,         mods: Alt,       chars: "\x1ba"                       }
 #   - { key: B,         mods: Alt,       chars: "\x1bb"                       }
 #   - { key: C,         mods: Alt,       chars: "\x1bc"                       }

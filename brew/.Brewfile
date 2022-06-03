@@ -24,5 +24,8 @@ brew "minikube"
 # brew "docker"
 # brew "docker-compose"
 
-tap "homebrew/cask-fonts"
-cask "font-jetbrains-mono"
+tap "epk/epk"
+cask "font-sf-mono-nerd-font"
+
+tap homebrew/cask-fonts
+cask font-hack-nerd-font
