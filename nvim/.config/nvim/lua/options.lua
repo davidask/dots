@@ -1,6 +1,8 @@
 local opt = vim.opt
 local g = vim.g
 
+opt.completeopt = "menuone,noselect"
+
 -- use filetype.lua instead of filetype.vim
 g.did_load_filetypes = 0
 g.do_filetype_lua = 1
@@ -13,7 +15,7 @@ opt.laststatus = 3 -- global statusline
 opt.title = true
 opt.clipboard = "unnamedplus"
 opt.cmdheight = 1
-opt.cul = true -- cursor line
+opt.cul = false -- cursor line
 
 
 opt.autoread = true

@@ -54,7 +54,7 @@ function M.on_attach(client, _)
     client.resolved_capabilities.document_range_formatting = false
   end
 
-  require("core.mappings").lspconfig()
+  require("mappings").lspconfig()
 end
 
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -71,8 +71,6 @@ capabilities.textDocument.completion.completionItem.tagSupport = {
 capabilities.textDocument.completion.completionItem.resolveSupport = {
   properties = { "documentation", "detail", "additionalTextEdits" },
 }
-
-capabilities = require("cmp_nvim_lsp").update_capabilities(capabilities)
 
 lspconfig.sumneko_lua.setup({
   on_attach = M.on_attach,
@@ -108,6 +106,10 @@ lspconfig.eslint.setup({
 lspconfig.sourcekit.setup({
   on_attach = M.on_attach,
   capabilities = capabilities,
+  filetypes = {
+    "swift",
+    "objective-c",
+  },
 })
 
 lspconfig.dockerls.setup({
@@ -119,6 +121,18 @@ lspconfig.bashls.setup({
   on_attach = M.on_attach,
   capabilities = capabilities,
 })
+
+lspconfig.clangd.setup({
+  on_attach = M.on_attach,
+  capabilities = capabilities,
+})
+
+lspconfig.cmake.setup({
+  on_attach = M.on_attach,
+  capabilities = capabilities,
+})
+
+lspconfig.ltex.setup{}
 
 lspconfig.yamlls.setup({
   on_attach = M.on_attach,

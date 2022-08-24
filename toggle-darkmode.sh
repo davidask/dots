@@ -21,4 +21,3 @@ else
   osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
   replace "$DARK" "$LIGHT"
 fi
-tmux source-file ~/.tmux.conf

@@ -1,6 +1,4 @@
-#!/usr/bin/env zsh
-
-set -exuo pipefail
+#!/usr/bin/env fish
 
 rm -f ~/.zcompdump
 chmod -R go-w "$(brew --prefix)/share"
@@ -8,8 +6,8 @@ chmod -R go-w "$(brew --prefix)/share"
 echo "Brewing..."
 brew bundle --no-lock --file ~/.Brewfile --quiet --zap
 
-$(brew --prefix)/opt/fzf/install \
-  --no-fish \
+eval (brew --prefix)/opt/fzf/install \
+  --no-zsh \
   --no-bash \
   --key-bindings \
   --completion \

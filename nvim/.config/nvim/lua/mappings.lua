@@ -1,7 +1,6 @@
-local utils = require("core.utils")
+local utils = require("utils")
 
 local map = utils.map
-local user_cmd = vim.api.nvim_create_user_command
 
 vim.g.mapleader = " "
 
@@ -26,9 +25,6 @@ map("", "<Up>", 'v:count || mode(1)[0:1] == "no" ? "k" : "gk"', { expr = true })
 -- use ESC to turn off search highlighting
 map("n", "<Esc>", "<cmd> :noh <CR>")
 
--- Escape terminal with "w"
-map("t", "<C-\\><C-w>", "<C-\\><C-n>")
-
 -- move cursor within insert mode
 map("i", "<C-h>", "<Left>")
 map("i", "<C-e>", "<End>")
@@ -43,35 +39,24 @@ map("n", "<C-l>", "<C-w>l")
 map("n", "<C-k>", "<C-w>k")
 map("n", "<C-j>", "<C-w>j")
 
-map("n", "<leader>x", function()
-  require("core.utils").close_buffer()
-end)
-
-map("n", "<C-c>", "<cmd> :%y+ <CR>") -- copy whole file content
-map("n", "<S-t>", "<cmd> :enew <CR>") -- new buffer
-map("n", "<C-t>b", "<cmd> :tabnew <CR>") -- new tabs
 map("n", "<leader>n", "<cmd> :set nu! <CR>")
 map("n", "<leader>rn", "<cmd> :set rnu! <CR>") -- relative line numbers
-map("n", "<C-s>", "<cmd> :w <CR>") -- ctrl + s to save file
 
-
+-- Line numbers
 map("n", "Q", "<nop>")
 
+-- Buffers & Tabs
+map("n", "<C-B>w", "<cmd>bwipe<CR>") -- wipe buffer
+map("n", "<C-B>k", "<cmd>bufdo bwipe<CR>") -- wipe all buffers
+map("n", "<S-t>", "<cmd> :enew <CR>") -- new buffer
+map("n", "<C-t>b", "<cmd> :tabnew <CR>") -- new tabs
+map("n", "<C-s>", "<cmd> :w <CR>") -- ctrl + s to save file
+
+-- Terminal
+map("n", "t", "<cmd>term<CR>i") -- term
+map("t", "<C-\\><C-w>", "<C-\\><C-n>") -- Escape terminal with "w"
+
 -- Add Packer commands because we are not loading it at startup
-
-local packer_cmd = function(callback)
-  return function()
-    require("plugins")
-    require("packer")[callback]()
-  end
-end
-
-user_cmd("PackerClean", packer_cmd("clean"), {})
-user_cmd("PackerCompile", packer_cmd("compile"), {})
-user_cmd("PackerInstall", packer_cmd("install"), {})
-user_cmd("PackerStatus", packer_cmd("status"), {})
-user_cmd("PackerSync", packer_cmd("sync"), {})
-user_cmd("PackerUpdate", packer_cmd("update"), {})
 
 local M = {}
 
@@ -124,47 +109,58 @@ M.lspconfig = function()
     vim.diagnostic.goto_prev()
   end)
 
-  map("n", "<leader>gq", function()
-    vim.diagnostic.setloclist()
-  end)
-
   map("n", "<leader>fm", function()
     vim.lsp.buf.formatting()
-  end)
-
-  map("n", "<leader>wa", function()
-    vim.lsp.buf.add_workspace_folder()
-  end)
-
-  map("n", "<leader>wr", function()
-    vim.lsp.buf.remove_workspace_folder()
-  end)
-
-  map("n", "<leader>wl", function()
-    print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
   end)
 end
 
 M.telescope = function()
-  map("n", "<leader>,", "<cmd> :Telescope find_files <CR>")
-  map("n", "<leader>.", "<cmd> :Telescope file_browser <CR>")
-  map("n", "<leader>/", "<cmd> :Telescope live_grep <CR>")
-  map("n", "<leader>;", "<cmd> :Telescope buffers <CR>")
-  map("n", "<leader>'", "<cmd> :Telescope oldfiles <CR>")
-  map("n", "<leader>p", "<cmd> :Telescope project <CR>")
+  map("n", "<leader>,", "<cmd>Telescope find_files<CR>")
+  map("n", "<leader>.", "<cmd>Telescope file_browser<CR>")
+  map("n", "<leader>/", "<cmd>Telescope live_grep<CR>")
 
-  map("n", "<leader>GC", "<cmd> :Telescope git_commits <CR>")
-  map("n", "<leader>GCB", "<cmd> :Telescope git_bcommits <CR>")
-  map("n", "<leader>GS", "<cmd> :Telescope git_status <CR>")
-  map("n", "<leader>GB", "<cmd> :Telescope git_branches <CR>")
+  map("n", "<leader>;", "<cmd>Telescope buffers<CR>")
+  map("n", "<leader>'", "<cmd>Telescope project<CR>")
 
-  map("n", "<leader>fh", "<cmd> :Telescope help_tags <CR>")
-  map("n", "<leader>tk", "<cmd> :Telescope keymaps <CR>")
+  map("n", "<leader>GC", "<cmd>Telescope git_commits<CR>")
+  map("n", "<leader>GCB", "<cmd>Telescope git_bcommits<CR>")
+  map("n", "<leader>GS", "<cmd>Telescope git_status<CR>")
+  map("n", "<leader>GB", "<cmd>Telescope git_branches<CR>")
+
+  map("n", "<leader>tk", "<cmd>Telescope keymaps<CR>")
 end
 
 M.fugitive = function()
   map("n", "<leader>G", "<cmd> :tab G <CR>")
   map("n", "<leader>GP", "<cmd> :G push <CR>")
+end
+
+M.dap = function()
+  map("n", "<F1>", '<cmd>lua require("dapui").toggle()<CR>')
+  map("n", "<F2>", '<cmd>lua require("dap").continue()<CR>')
+  map("n", "<F3>", '<cmd>lua require("dap").repl.open()<CR>')
+  map("n", "<F4>", '<cmd>lua require("dap").run_last()<CR>')
+
+  map("n", "<F5>", '<cmd>lua require("dap").step_over()<CR>')
+  map("n", "<F6>", '<cmd>lua require("dap").step_into()<CR>')
+  map("n", "<F7>", '<cmd>lua require("dap").step_out()<CR>')
+
+  map("n", "<F9>", '<cmd>lua require("dap").toggle_breakpoint()<CR>')
+  map("n", "<F10>", '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>')
+  map("n", "<F11>", '<cmd>lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>')
+end
+
+M.cmake = function()
+  map("n", "<leader>cm", function()
+    local commands = { "build_and_debug", "build_and_run", "build_all", "run", "debug", "clean", "configure", "select_target" }
+
+    vim.ui.select(commands, { prompt = "Select CMake action" }, function(command)
+      if not command then
+        return
+      end
+      vim.cmd("CMake " .. command)
+    end)
+  end)
 end
 
 return M
