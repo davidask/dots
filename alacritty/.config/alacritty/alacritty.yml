@@ -244,7 +244,7 @@ schemes:
       - { index: 16, color: "0xd18616" }
       - { index: 17, color: "0xcb2431" }
 
-  everforest_dark_hard: 
+  everforest_dark_hard:
     primary:
       background: "#2b3339"
       foreground: "#d3c6aa"
@@ -590,6 +590,10 @@ colors: *dark
 #   - (Windows) powershell
 shell:
   program: /opt/homebrew/bin/fish
+  args:
+    - --login
+    - --command
+    - "tmux attach || tmux"
 
 # Startup directory
 #
