@@ -1,7 +1,5 @@
 brew "stow"
 brew "wget"
-brew "tmux"
-brew "reattach-to-user-namespace"
 brew "fzf"
 brew "mas"
 brew "jq"

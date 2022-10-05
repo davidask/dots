@@ -142,7 +142,7 @@ font:
     #family: monospace
 
     # The `style` can be specified to pick a specific face.
-    style: Italic
+    style: Light Italic
 
   # Bold italic font face
   bold_italic:
@@ -310,7 +310,7 @@ schemes:
       magenta: "#d699b6"
       cyan: "#83c092"
       white: "#d3c6aa"
-  everforest_light_hard: &light
+  everforest_light_hard:
     primary:
       background: "#fff9e8"
       foreground: "#5c6a72"
@@ -377,7 +377,7 @@ schemes:
       cyan: "#35a77c"
       white: "#dfddc8"
 
-  rose_pine_dark:
+  rose_pine_dark: &dark
     primary:
       background: "0x191724"
       foreground: "0xe0def4"
@@ -413,7 +413,7 @@ schemes:
         foreground: "#6e6a86"
         background: "#1f1d2e"
 
-  rose_pine_moon: &dark
+  rose_pine_moon:
     primary:
       background: "0x232136"
       foreground: "0xe0def4"
@@ -485,7 +485,7 @@ schemes:
         foreground: "#9893a5"
         background: "#fffaf3"
 
-colors: *dark
+colors: *light
 
 # Bell
 #
@@ -592,8 +592,6 @@ shell:
   program: /opt/homebrew/bin/fish
   args:
     - --login
-    - --command
-    - "tmux attach || tmux"
 
 # Startup directory
 #

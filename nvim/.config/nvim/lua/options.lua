@@ -3,10 +3,6 @@ local g = vim.g
 
 opt.completeopt = "menuone,noselect"
 
--- use filetype.lua instead of filetype.vim
-g.did_load_filetypes = 0
-g.do_filetype_lua = 1
-g.toggle_theme_icon = "   "
 
 opt.confirm = true
 -- Soon
@@ -14,9 +10,8 @@ opt.confirm = true
 opt.laststatus = 3 -- global statusline
 opt.title = true
 opt.clipboard = "unnamedplus"
-opt.cmdheight = 1
+opt.cmdheight = 0
 opt.cul = false -- cursor line
-
 
 opt.autoread = true
 
@@ -31,7 +26,6 @@ opt.fillchars = { eob = " " }
 opt.hidden = true
 opt.ignorecase = true
 opt.smartcase = false
-opt.mouse = "a"
 opt.scrolloff = 20
 
 -- Numbers
@@ -39,9 +33,6 @@ opt.number = true
 opt.numberwidth = 2
 opt.relativenumber = true
 opt.ruler = false
-
--- disable nvim intro
-opt.shortmess:append "sI"
 
 opt.signcolumn = "yes"
 opt.splitbelow = true
@@ -61,36 +52,37 @@ opt.updatetime = 250
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
-opt.whichwrap:append "<>[]hl"
+opt.whichwrap:append("<>[]hl")
+vim.wo.wrap = false
 
 -- disable some builtin vim plugins
 
 local default_plugins = {
-   "2html_plugin",
-   "getscript",
-   "getscriptPlugin",
-   "gzip",
-   "logipat",
-   "netrw",
-   "netrwPlugin",
-   "netrwSettings",
-   "netrwFileHandlers",
-   "matchit",
-   "tar",
-   "tarPlugin",
-   "rrhelper",
-   "spellfile_plugin",
-   "vimball",
-   "vimballPlugin",
-   "zip",
-   "zipPlugin",
+  "2html_plugin",
+  "getscript",
+  "getscriptPlugin",
+  "gzip",
+  "logipat",
+  "netrw",
+  "netrwPlugin",
+  "netrwSettings",
+  "netrwFileHandlers",
+  "matchit",
+  "tar",
+  "tarPlugin",
+  "rrhelper",
+  "spellfile_plugin",
+  "vimball",
+  "vimballPlugin",
+  "zip",
+  "zipPlugin",
 }
 
 for _, plugin in pairs(default_plugins) do
-   g["loaded_" .. plugin] = 1
+  g["loaded_" .. plugin] = 1
 end
 
-vim.schedule(function()
-   vim.opt.shadafile = vim.fn.expand "$HOME" .. "/.local/share/nvim/shada/main.shada"
-   vim.cmd [[ silent! rsh ]]
-end)
+-- vim.schedule(function()
+--   vim.opt.shadafile = vim.fn.expand("$HOME") .. "/.local/share/nvim/shada/main.shada"
+--   vim.cmd([[ silent! rsh ]])
+-- end)

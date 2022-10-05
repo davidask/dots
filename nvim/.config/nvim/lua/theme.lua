@@ -3,8 +3,9 @@ local M = {}
 
 function M.set_color_scheme()
   require("rose-pine").setup({
-    dark_variant = "moon",
+    -- dark_variant = "moon",
   })
+
   vim.cmd([[
 
       " Everforest specific

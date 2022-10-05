@@ -25,6 +25,7 @@ autocmd("FileType", {
   end,
 })
 
+-- https://unix.stackexchange.com/questions/149209/refresh-changed-content-of-file-opened-in-vim/383044#383044
 vim.cmd([[
   augroup autoread
     autocmd!
@@ -49,9 +50,13 @@ vim.cmd([[
   augroup end
 ]])
 
-vim.cmd([[
-  augroup matchup_matchparen_highlight
-    autocmd!
-    autocmd ColorScheme * hi MatchParen cterm=underline gui=underline
-  augroup end
-]])
+-- vim.cmd([[
+--   augroup matchup_matchparen_highlight
+--     autocmd!
+--     autocmd ColorScheme * hi MatchParen cterm=underline gui=underline
+--   augroup end
+-- ]])
+
+-- vim.cmd([[
+--   autocmd BufWritePre * lua vim.lsp.buf.formatting_sync()
+-- ]])
