@@ -31,6 +31,11 @@ map("n", "<leader>rn", "<cmd>set rnu! <CR>") -- relative line numbers
 -- Line numbers
 map("n", "Q", "<nop>")
 
+
+-- Line numbers
+map("n", "<C-N>", "<cmd>bnext<CR>")
+map("n", "<C-P>", "<cmd>bprev<CR>")
+
 -- Buffers & Tabs
 map("n", "<C-B>w", "<cmd>bwipe<CR>") -- wipe buffer
 map("n", "<C-B>k", "<cmd>bufdo bwipe<CR>") -- wipe all buffers

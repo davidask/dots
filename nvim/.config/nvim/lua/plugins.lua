@@ -1,79 +1,40 @@
-local fn = vim.fn
-
--- Automatically install packer
-local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
-if fn.empty(fn.glob(install_path)) > 0 then
-  PACKER_BOOTSTRAP = fn.system({
-    "git",
-    "clone",
-    "--depth",
-    "1",
-    "https://github.com/wbthomason/packer.nvim",
-    install_path,
-  })
-  print("Installing packer close and reopen Neovim...")
-  vim.cmd([[packadd packer.nvim]])
+local ensure_packer = function()
+  local fn = vim.fn
+  local install_path = fn.stdpath("data") .. "/site/pack/packer/start/packer.nvim"
+  if fn.empty(fn.glob(install_path)) > 0 then
+    fn.system({ "git", "clone", "--depth", "1", "https://github.com/wbthomason/packer.nvim", install_path })
+    vim.cmd([[packadd packer.nvim]])
+    return true
+  end
+  return false
 end
 
--- Use a protected call so we don't error out on first use
-local status_ok, packer = pcall(require, "packer")
-if not status_ok then
-  return
-end
+local packer_bootstrap = ensure_packer()
 
--- Have packer use a popup window
-packer.init({
-  display = {
-    open_fn = function()
-      return require("packer.util").float({ border = "single" })
-    end,
-  },
-})
+local packer = require("packer")
 
 return packer.startup({
   function(use)
-    use({ "wbthomason/packer.nvim" })
-
-    use("nvim-lua/plenary.nvim")
-
     use({
-      "lewis6991/impatient.nvim",
+      "wbthomason/packer.nvim",
       config = function()
-        require("impatient")
+        require("plugins")
       end,
     })
-    use({
-      "antoinemadec/FixCursorHold.nvim",
-      event = { "BufRead", "BufNewFile" },
-    })
+    use("lewis6991/impatient.nvim")
+
+    use({ "nvim-lua/plenary.nvim", module = "plenary" })
 
     use({
       "kyazdani42/nvim-web-devicons",
-    })
-
-    use({
-      "folke/twilight.nvim",
-      cmd = {
-        "Twilight",
-        "TwilightEnable",
-        "TwiLightDisable",
-      },
-      config = function()
-        require("twilight").setup({})
-      end,
-    })
-
-    use({
-      "folke/persistence.nvim",
-      event = "BufReadPre",
-      module = "persistence",
-      config = function()
-        require("persistence").setup()
-      end,
+      module = "nvim-web-devicons",
     })
 
     use({
       "iamcco/markdown-preview.nvim",
+      cmd = {
+        "MarkdownPreview",
+      },
       run = function()
         vim.fn["mkdp#util#install"]()
       end,
@@ -85,24 +46,22 @@ return packer.startup({
 
     use({ "sainnhe/everforest" })
 
-    -- use({
-    --   "nvim-lualine/lualine.nvim",
-    --   event = { "BufRead", "BufNewFile" },
-    --   config = function()
-    --     require("configs.statusline")
-    --   end,
-    -- })
+    use({
+      "nvim-lualine/lualine.nvim",
+      config = function()
+        require("configs.statusline")
+      end,
+    })
 
-    -- use({
-    --   "nanozuki/tabby.nvim",
-    --   config = function()
-    --     require("tabby").setup()
-    --   end,
-    -- })
+    use({
+      "nanozuki/tabby.nvim",
+      config = function()
+        require("tabby").setup()
+      end,
+    })
 
     use({
       "nvim-treesitter/nvim-treesitter",
-      event = { "BufRead", "BufNewFile" },
       run = ":TSUpdate",
       config = function()
         require("configs.treesitter")
@@ -119,7 +78,6 @@ return packer.startup({
 
     use({
       "lewis6991/gitsigns.nvim",
-      event = { "BufRead", "BufNewFile" },
       config = function()
         require("configs.gitsigns")
       end,
@@ -127,6 +85,7 @@ return packer.startup({
 
     use({
       "windwp/nvim-autopairs",
+      after = "nvim-cmp",
       config = function()
         require("configs.autopairs")
       end,
@@ -134,6 +93,8 @@ return packer.startup({
 
     use({
       "numToStr/Comment.nvim",
+      module = "Comment",
+      keys = { "gc", "gb" },
       config = function()
         require("Comment").setup()
       end,
@@ -141,15 +102,14 @@ return packer.startup({
 
     -- Telescope
 
+    use({ "nvim-telescope/telescope-project.nvim", cmd = "Telescope" })
+    use({ "nvim-telescope/telescope-file-browser.nvim", after = "telescope-project.nvim" })
+    use({ "nvim-telescope/telescope-ui-select.nvim", after = "telescope-file-browser.nvim" })
+    use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make", after = "telescope-ui-select.nvim" })
+
     use({
       "nvim-telescope/telescope.nvim",
-      requires = {
-        "nvim-lua/plenary.nvim",
-        "nvim-telescope/telescope-file-browser.nvim",
-        "nvim-telescope/telescope-ui-select.nvim",
-        { "nvim-telescope/telescope-fzf-native.nvim", run = "make" },
-        "nvim-telescope/telescope-project.nvim",
-      },
+      after = "telescope-fzf-native.nvim",
       setup = function()
         require("mappings").telescope()
       end,
@@ -158,55 +118,22 @@ return packer.startup({
       end,
     })
 
-    -- use({
-    --   "windwp/nvim-ts-autotag",
-    --   ft = {
-    --     "html",
-    --     "javascript",
-    --     "typescript",
-    --     "javascriptreact",
-    --     "typescriptreact",
-    --     "svelte",
-    --     "vue",
-    --     "tsx",
-    --     "jsx",
-    --     "rescript",
-    --     "xml",
-    --     "php",
-    --     "markdown",
-    --     "glimmer",
-    --     "handlebars",
-    --     "hbs",
-    --   },
-    -- })
-
     -- Completion
 
-    -- use({
-    --   "hrsh7th/nvim-cmp",
-    --   requires = {
-    --     "L3MON4D3/LuaSnip",
-    --     "saadparwaiz1/cmp_luasnip",
-    --     "hrsh7th/cmp-nvim-lua",
-    --     "hrsh7th/cmp-buffer",
-    --     "hrsh7th/cmp-nvim-lsp",
-    --     "hrsh7th/cmp-path",
-    --   },
-    --   after = {
-    --     "nvim-lspconfig",
-    --   },
-    --   config = function()
-    --     require("configs.cmp")
-    --   end,
-    -- })
-
     use({
-      "andymass/vim-matchup",
-      event = { "BufRead", "BufNewFile" },
+      "hrsh7th/nvim-cmp",
+      event = "InsertEnter",
       config = function()
-        vim.g.matchup_matchparen_offscreen = {}
+        require("configs.cmp")
       end,
     })
+
+    use({ "L3MON4D3/LuaSnip", after = "nvim-cmp" })
+    use({ "saadparwaiz1/cmp_luasnip", after = "LuaSnip" })
+    use({ "hrsh7th/cmp-nvim-lua", after = "cmp_luasnip" })
+    use({ "hrsh7th/cmp-nvim-lsp", after = "cmp-nvim-lua" })
+    use({ "hrsh7th/cmp-buffer", after = "cmp-nvim-lsp" })
+    use({ "hrsh7th/cmp-path", after = "cmp-buffer" })
 
     use({
       "ray-x/lsp_signature.nvim",
@@ -218,46 +145,47 @@ return packer.startup({
 
     use({
       "williamboman/mason.nvim",
-      event = { "BufRead", "BufNewFile" },
       config = function()
-        require("mason").setup()
+        require("configs.mason")
       end,
     })
 
     use({
       "williamboman/mason-lspconfig.nvim",
-      after = {
-        "mason.nvim",
+      requires = {
+        "williamboman/mason.nvim",
       },
       config = function()
-        require("mason-lspconfig").setup()
+        require("configs.mason-lspconfig")
       end,
     })
 
+    use({ "jose-elias-alvarez/null-ls.nvim", after = "mason-lspconfig.nvim", events = { "BufRead", "BufWinEnter", "BufNewFile" } })
+    use({ "simrat39/rust-tools.nvim", after = "null-ls.nvim" })
+
     use({
       "neovim/nvim-lspconfig",
-      requires = { "jose-elias-alvarez/null-ls.nvim", "simrat39/rust-tools.nvim" },
-      after = "mason-lspconfig.nvim",
+      after = "rust-tools.nvim",
       config = function()
         require("configs.lspconfig")
       end,
     })
-
-    use({
-      "Shatur/neovim-cmake",
-      after = { "plenary.nvim", "nvim-dap" },
-      config = function()
-        require("cmake").setup({
-          dap_configuration = {
-            type = "lldb",
-            request = "launch",
-            stopOnEntry = false,
-            runInTerminal = false,
-          },
-        })
-      end,
-    })
-
+    --
+    -- use({
+    --   "Shatur/neovim-cmake",
+    --   after = { "plenary.nvim", "nvim-dap" },
+    --   config = function()
+    --     require("cmake").setup({
+    --       dap_configuration = {
+    --         type = "lldb",
+    --         request = "launch",
+    --         stopOnEntry = false,
+    --         runInTerminal = false,
+    --       },
+    --     })
+    --   end,
+    -- })
+    --
     use({
       "tpope/vim-fugitive",
     })
@@ -270,24 +198,14 @@ return packer.startup({
       end,
     })
 
-    use({
-      "rcarriga/nvim-dap-ui",
-      after = { "mason.nvim", "nvim-dap" },
-      config = function()
-        require("configs.dapui")
-      end,
-      setup = function()
-        require("mappings").dap()
-      end,
-    })
-
-    -- Automatically set up your configuration after cloning packer.nvim
-    -- Put this at the end after all plugins
-    if PACKER_BOOTSTRAP then
+    if packer_bootstrap then
       packer.sync()
     end
   end,
   config = {
+    auto_clean = true,
+    compile_on_sync = true,
+    git = { clone_timeout = 6000 },
     display = {
       open_fn = function()
         return require("packer.util").float({ border = "single" })

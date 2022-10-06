@@ -1,72 +1,54 @@
 local opt = vim.opt
 local g = vim.g
 
-opt.completeopt = "menuone,noselect"
+opt.laststatus = 3
+opt.showmode = false
 
-
-opt.confirm = true
--- Soon
--- opt.winbar = "%f"
-opt.laststatus = 3 -- global statusline
 opt.title = true
 opt.clipboard = "unnamedplus"
-opt.cmdheight = 0
-opt.cul = false -- cursor line
+opt.cursorline = true
 
-opt.autoread = true
-
--- Indentline
+-- Indenting
 opt.expandtab = true
 opt.shiftwidth = 2
 opt.smartindent = true
+opt.tabstop = 2
+opt.softtabstop = 2
 
--- disable tilde on end of buffer: https://github.com/neovim/neovim/pull/8546#issuecomment-643643758
 opt.fillchars = { eob = " " }
-
-opt.hidden = true
 opt.ignorecase = true
-opt.smartcase = false
-opt.scrolloff = 20
+opt.smartcase = true
+opt.mouse = "a"
 
 -- Numbers
 opt.number = true
 opt.numberwidth = 2
-opt.relativenumber = true
 opt.ruler = false
+
+-- disable nvim intro
+opt.shortmess:append "sI"
 
 opt.signcolumn = "yes"
 opt.splitbelow = true
 opt.splitright = true
-opt.tabstop = 8
 opt.termguicolors = true
 opt.timeoutlen = 400
 opt.undofile = true
-
--- Turn backup off, since most stuff is in SVN, git etc. anyway...
-vim.opt.backup = false
-vim.opt.swapfile = false
-vim.opt.writebackup = false
 
 -- interval for writing swap file to disk, also used by gitsigns
 opt.updatetime = 250
 
 -- go to previous/next line with h,l,left arrow and right arrow
 -- when cursor reaches end/beginning of line
-opt.whichwrap:append("<>[]hl")
-vim.wo.wrap = false
+opt.whichwrap:append "<>[]hl"
 
 -- disable some builtin vim plugins
-
 local default_plugins = {
   "2html_plugin",
   "getscript",
   "getscriptPlugin",
   "gzip",
   "logipat",
-  "netrw",
-  "netrwPlugin",
-  "netrwSettings",
-  "netrwFileHandlers",
   "matchit",
   "tar",
   "tarPlugin",
@@ -76,13 +58,27 @@ local default_plugins = {
   "vimballPlugin",
   "zip",
   "zipPlugin",
+  "tutor",
+  "rplugin",
+  "syntax",
+  "synmenu",
+  "optwin",
+  "compiler",
+  "bugreport",
+  "ftplugin",
 }
 
 for _, plugin in pairs(default_plugins) do
   g["loaded_" .. plugin] = 1
 end
 
--- vim.schedule(function()
---   vim.opt.shadafile = vim.fn.expand("$HOME") .. "/.local/share/nvim/shada/main.shada"
---   vim.cmd([[ silent! rsh ]])
--- end)
+local default_providers = {
+  "node",
+  "perl",
+  "python3",
+  "ruby",
+}
+
+for _, provider in ipairs(default_providers) do
+  vim.g["loaded_" .. provider .. "_provider"] = 0
+end
