@@ -15,13 +15,13 @@
 # environment variables. Some entries may override variables
 # set by alacritty itself.
 # env:
-  # TERM variable
-  #
-  # This value is used to set the `$TERM` environment variable for
-  # each instance of Alacritty. If it is not present, alacritty will
-  # check the local terminfo database and use `alacritty` if it is
-  # available, otherwise `xterm-256color` is used.
-  # TERM: xterm-256color
+# TERM variable
+#
+# This value is used to set the `$TERM` environment variable for
+# each instance of Alacritty. If it is not present, alacritty will
+# check the local terminfo database and use `alacritty` if it is
+# available, otherwise `xterm-256color` is used.
+# TERM: xterm-256color
 
 window:
   # Window dimensions (changes require restart)
@@ -117,7 +117,7 @@ font:
     #   - (macOS) Menlo
     #   - (Linux/BSD) monospace
     #   - (Windows) Consolas
-    family: Menlo NF
+    family: SFMono Nerd Font
 
     # The `style` can be specified to pick a specific face.
     style: Regular
@@ -182,6 +182,135 @@ font:
 draw_bold_text_with_bright_colors: false
 
 schemes:
+  # TokyoNight Alacritty Colors
+  tokyonight_day: &light # Default colors
+    primary:
+      background: "0xe1e2e7"
+      foreground: "0x3760bf"
+
+    # Normal colors
+    normal:
+      black: "0xe9e9ed"
+      red: "0xf52a65"
+      green: "0x587539"
+      yellow: "0x8c6c3e"
+      blue: "0x2e7de9"
+      magenta: "0x9854f1"
+      cyan: "0x007197"
+      white: "0x6172b0"
+
+    # Bright colors
+    bright:
+      black: "0xa1a6c5"
+      red: "0xf52a65"
+      green: "0x587539"
+      yellow: "0x8c6c3e"
+      blue: "0x2e7de9"
+      magenta: "0x9854f1"
+      cyan: "0x007197"
+      white: "0x3760bf"
+
+    indexed_colors:
+      - { index: 16, color: "0xb15c00" }
+      - { index: 17, color: "0xc64343" }
+
+  tokyonight_moon: &dark # Default colors
+    primary:
+      background: "0x222436"
+      foreground: "0xc8d3f5"
+
+    # Normal colors
+    normal:
+      black: "0x1b1d2b"
+      red: "0xff757f"
+      green: "0xc3e88d"
+      yellow: "0xffc777"
+      blue: "0x82aaff"
+      magenta: "0xc099ff"
+      cyan: "0x86e1fc"
+      white: "0x828bb8"
+
+    # Bright colors
+    bright:
+      black: "0x444a73"
+      red: "0xff757f"
+      green: "0xc3e88d"
+      yellow: "0xffc777"
+      blue: "0x82aaff"
+      magenta: "0xc099ff"
+      cyan: "0x86e1fc"
+      white: "0xc8d3f5"
+
+    indexed_colors:
+      - { index: 16, color: "0xff966c" }
+      - { index: 17, color: "0xc53b53" }
+
+    # TokyoNight Alacritty Colors
+    tokyonight_night:
+      # Default colors
+      primary:
+        background: "0x1a1b26"
+        foreground: "0xc0caf5"
+
+      # Normal colors
+      normal:
+        black: "0x15161e"
+        red: "0xf7768e"
+        green: "0x9ece6a"
+        yellow: "0xe0af68"
+        blue: "0x7aa2f7"
+        magenta: "0xbb9af7"
+        cyan: "0x7dcfff"
+        white: "0xa9b1d6"
+
+      # Bright colors
+      bright:
+        black: "0x414868"
+        red: "0xf7768e"
+        green: "0x9ece6a"
+        yellow: "0xe0af68"
+        blue: "0x7aa2f7"
+        magenta: "0xbb9af7"
+        cyan: "0x7dcfff"
+        white: "0xc0caf5"
+
+      indexed_colors:
+        - { index: 16, color: "0xff9e64" }
+        - { index: 17, color: "0xdb4b4b" }
+
+    # TokyoNight Alacritty Colors
+    tokyonight_storm:
+      # Default colors
+      primary:
+        background: "0x24283b"
+        foreground: "0xc0caf5"
+
+      # Normal colors
+      normal:
+        black: "0x1d202f"
+        red: "0xf7768e"
+        green: "0x9ece6a"
+        yellow: "0xe0af68"
+        blue: "0x7aa2f7"
+        magenta: "0xbb9af7"
+        cyan: "0x7dcfff"
+        white: "0xa9b1d6"
+
+      # Bright colors
+      bright:
+        black: "0x414868"
+        red: "0xf7768e"
+        green: "0x9ece6a"
+        yellow: "0xe0af68"
+        blue: "0x7aa2f7"
+        magenta: "0xbb9af7"
+        cyan: "0x7dcfff"
+        white: "0xc0caf5"
+
+  indexed_colors:
+    - { index: 16, color: "0xff9e64" }
+    - { index: 17, color: "0xdb4b4b" }
+
   github_dark_dimmed:
     primary:
       background: "0x22272e"
@@ -377,7 +506,7 @@ schemes:
       cyan: "#35a77c"
       white: "#dfddc8"
 
-  rose_pine_dark: &dark
+  rose_pine_dark:
     primary:
       background: "0x191724"
       foreground: "0xe0def4"
@@ -449,7 +578,7 @@ schemes:
         foreground: "#6e6a86"
         background: "#2a273f"
 
-  rose_pine_light: &light
+  rose_pine_light:
     primary:
       background: "0xfaf4ed"
       foreground: "0x575279"
@@ -485,7 +614,7 @@ schemes:
         foreground: "#9893a5"
         background: "#fffaf3"
 
-colors: *light
+colors: *dark
 
 # Bell
 #

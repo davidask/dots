@@ -42,9 +42,11 @@ return packer.startup({
 
     -- Themes
 
-    use({ "rose-pine/neovim" })
+    use("rose-pine/neovim")
 
-    use({ "sainnhe/everforest" })
+    use("sainnhe/everforest")
+
+    use("folke/tokyonight.nvim")
 
     use({
       "nvim-lualine/lualine.nvim",
@@ -160,7 +162,8 @@ return packer.startup({
       end,
     })
 
-    use({ "jose-elias-alvarez/null-ls.nvim", after = "mason-lspconfig.nvim", events = { "BufRead", "BufWinEnter", "BufNewFile" } })
+    use({ "jose-elias-alvarez/null-ls.nvim", after = "mason-lspconfig.nvim",
+      events = { "BufRead", "BufWinEnter", "BufNewFile" } })
     use({ "simrat39/rust-tools.nvim", after = "null-ls.nvim" })
 
     use({

@@ -4,15 +4,13 @@ local M = {}
 function M.set_color_scheme()
 
   vim.cmd([[
-      " Everforest specific
-      let g:everforest_background = 'hard'
-
       if system("defaults read -g AppleInterfaceStyle") =~ '^Dark'
           set background=dark
+          colorscheme tokyonight-moon
       else
           set background=light
+          colorscheme tokyonight-day
       endif
-      colorscheme rose-pine
     ]])
 end
 

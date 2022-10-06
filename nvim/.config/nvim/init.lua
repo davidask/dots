@@ -7,7 +7,7 @@ require("plugins")
 
 
 require("autocmds")
-require("theme")
 require("mappings")
+require("theme").set_color_scheme()
 
 

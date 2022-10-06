@@ -104,7 +104,7 @@ M.lspconfig = function(bufnr)
   end, opt)
 
   map("n", "<leader>fm", function()
-    vim.lsp.buf.format { async = true }
+    vim.lsp.buf.format { async = false }
   end, opt)
 end
 
