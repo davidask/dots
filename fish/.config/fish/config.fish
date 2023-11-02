@@ -16,14 +16,13 @@ if test (uname) = "Darwin"
   end
 end
 
-set -gx PATH "$HOME/.cargo/bin" $PATH;
+fish_add_path "$HOME/.cargo/bin"
 
 alias dotfiles "cd ~/.dotfiles && nvim"
-alias g git
+
+set -gx GOENV_ROOT "$HOME/.goenv"
+fish_add_path "$GOENV_ROOT/bin"
+goenv init - | source
 
 fnm env --use-on-cd | source
 starship init fish | source
-
-# bun
-set --export BUN_INSTALL "$HOME/.bun"
-set --export PATH $BUN_INSTALL/bin $PATH

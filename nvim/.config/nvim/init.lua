@@ -1,13 +1,7 @@
-vim.defer_fn(function()
-  pcall(require, "impatient")
-end, 0)
-
 require("options")
 require("plugins")
-
-
+require("cmds")
 require("autocmds")
 require("mappings")
-require("theme").set_color_scheme()
-
+require("theme")
 

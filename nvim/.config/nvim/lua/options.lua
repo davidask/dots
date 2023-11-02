@@ -18,15 +18,20 @@ opt.softtabstop = 2
 opt.fillchars = { eob = " " }
 opt.ignorecase = true
 opt.smartcase = true
-opt.mouse = "a"
+
+-- No mice
+opt.mouse = ""
 
 -- Numbers
 opt.number = true
+opt.relativenumber = true
 opt.numberwidth = 2
 opt.ruler = false
 
 -- disable nvim intro
 opt.shortmess:append "sI"
+
+opt.shell = "/opt/homebrew/bin/fish"
 
 opt.signcolumn = "yes"
 opt.splitbelow = true
@@ -38,9 +43,11 @@ opt.undofile = true
 -- interval for writing swap file to disk, also used by gitsigns
 opt.updatetime = 250
 
--- go to previous/next line with h,l,left arrow and right arrow
--- when cursor reaches end/beginning of line
-opt.whichwrap:append "<>[]hl"
+vim.opt.swapfile = false
+
+
+opt.wrap = false           -- do not automatically wrap on load
+opt.formatoptions:remove "t" -- do not automatically wrap text when typing
 
 -- disable some builtin vim plugins
 local default_plugins = {

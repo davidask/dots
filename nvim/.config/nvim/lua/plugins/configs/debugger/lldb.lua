@@ -1,14 +1,16 @@
-local present, dap = pcall(require, "dap")
+local dap = require("dap")
 
-if not present then
-  return
+dap.adapters.lldb = function(cb, config)
+  if config.preLaunchCmd then
+    vim.fn.system(config.preLaunchCmd)
+  end
+  local adapter = {
+    type = "executable",
+    command = "lldb-vscode",
+    name = "lldb",
+  }
+  cb(adapter)
 end
-
-dap.adapters.lldb = {
-  type = "executable",
-  command = "lldb-vscode",
-  name = "lldb",
-}
 
 dap.configurations.cpp = {
   {

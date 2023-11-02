@@ -24,7 +24,7 @@
 	# Commit all changes.
 	ca = !git add -A && git commit -av
 
-  	aa = add -A
+  aa = add -A
 
 	# Switch to a branch, creating it if necessary.
 	cof = "!f() { git checkout -b \"$1\" 2> /dev/null || git checkout \"$1\"; }; f"
@@ -175,3 +175,7 @@
 	editor = nvim
 [pull]
   ff = only
+[init]
+	defaultBranch = master
+[credential]
+	helper = store

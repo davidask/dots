@@ -15,3 +15,10 @@ eval (brew --prefix)/opt/fzf/install \
 
 # Rust
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --no-modify-path
+
+# Alacritty
+defaults write org.alacritty AppleFontSmoothing -int 0
+
+# Fisher
+curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
+

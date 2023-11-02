@@ -5,50 +5,36 @@ local map = utils.map
 vim.g.mapleader = " "
 
 -- use ESC to turn off search highlighting
-map("n", "<Esc>", "<cmd> :noh <CR>")
+vim.keymap.set("n", "<leader><Esc>", "<cmd>noh<cr>", { desc = "Clear highlights" })
 
--- move cursor within insert mode
-map("i", "<C-h>", "<Left>")
-map("i", "<C-e>", "<End>")
-map("i", "<C-l>", "<Right>")
-map("i", "<C-j>", "<Down>")
-map("i", "<C-k>", "<Up>")
+vim.keymap.set("n", "<C-A>n", "<cmd>tabnext<CR>", { desc = "Next tab" })
+vim.keymap.set("n", "<C-A>p", "<cmd>tabprev<CR>", { desc = "Previous tab" })
+vim.keymap.set("n", "<C-A>c", "<cmd>tabnew<CR>", { desc = "New tab" })
 
--- tmux-style navigation between tabs
-map("n", "<C-a>n", "<cmd>tabnext<CR>")
-map("n", "<C-a>p", "<cmd>tabprev<CR>")
-map("n", "<C-a>c", "<cmd>tabnew<CR>")
+vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move focus left" })
+vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move focus right" })
+vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move focus up" })
+vim.keymap.set("n", "<C-j>", "<C-w>j", { desc = "Move focus down" })
 
--- navigation between windows
-map("n", "<C-h>", "<C-w>h")
-map("n", "<C-l>", "<C-w>l")
-map("n", "<C-k>", "<C-w>k")
-map("n", "<C-j>", "<C-w>j")
+vim.keymap.set("n", "<TAB>", "<cmd>bnext<CR>", { desc = "Cycle buffer next" })
+vim.keymap.set("n", "<S-TAB>", "<cmd>bprev<CR>", { desc = "Cycle buffer prev" })
 
-map("n", "<leader>n", "<cmd>set nu! <CR>")
-map("n", "<leader>rn", "<cmd>set rnu! <CR>") -- relative line numbers
+vim.keymap.set("t", "<C-\\><C-w>", "<C-\\><C-n>", { desc = "Exit terminal" })
 
--- Line numbers
-map("n", "Q", "<nop>")
+vim.keymap.set("n", "<C-s>", "<cmd>w<CR>", { desc = "Save" })
+vim.keymap.set("i", "<C-s>", "<cmd>w<CR><esc>", { desc = "Save" })
 
+vim.keymap.set("n", "<leader>yfn", '<cmd>let @+ = expand("%:t")<CR><cmd>echomsg "Yanked filename."<CR>', { desc = "Yank file name" })
+vim.keymap.set("n", "<leader>yfa", '<cmd>let @+ = expand("%:p")<CR><cmd>echomsg "Yanked absolute file path."<CR>', { desc = "Yank absolute file path" })
+vim.keymap.set("n", "<leader>yfr", '<cmd>let @+ = expand("%")<CR><cmd>echomsg "Yanked relative file path."<CR>', { desc = "Yank relative file path" })
 
--- Line numbers
-map("n", "<C-N>", "<cmd>bnext<CR>")
-map("n", "<C-P>", "<cmd>bprev<CR>")
-
--- Buffers & Tabs
-map("n", "<C-B>w", "<cmd>bwipe<CR>") -- wipe buffer
-map("n", "<C-B>k", "<cmd>bufdo bwipe<CR>") -- wipe all buffers
-map("n", "<S-t>", "<cmd>enew <CR>") -- new buffer
-map("n", "<C-t>n", "<cmd>tabnew <CR>") -- new tabs
-map("n", "<C-s>", "<cmd>w<CR>") -- ctrl + s to save file
-map("i", "<C-s>", "<cmd>w<CR><esc>") -- ctrl + s to save file in insert mode
-
--- Terminal
-map("n", "t", "<cmd>term<CR>i") -- term
-map("t", "<C-\\><C-w>", "<C-\\><C-n>") -- Escape terminal with "w"
+vim.keymap.set("n", "<leader>tdm", '<cmd>exec &bg=="light"? "set bg=dark" : "set bg=light"<CR>', { desc = "Toogle background" })
 
 local M = {}
+
+M.formatter = function()
+  vim.keymap.set("n", "<leader>fm", "<cmd>Format<CR>", { desc = "Format" })
+end
 
 M.lspconfig = function(bufnr)
   local telescope_builtins = require("telescope.builtin")
@@ -79,10 +65,6 @@ M.lspconfig = function(bufnr)
     vim.lsp.buf.hover()
   end, opt)
 
-  map("n", "<leader>k", function()
-    vim.lsp.buf.signature_help()
-  end, opt)
-
   map("n", "<leader>ra", function()
     vim.lsp.buf.rename()
   end, opt)
@@ -102,26 +84,6 @@ M.lspconfig = function(bufnr)
   map("n", "g[", function()
     vim.diagnostic.goto_prev()
   end, opt)
-
-  map("n", "<leader>fm", function()
-    vim.lsp.buf.format { async = false }
-  end, opt)
-end
-
-M.telescope = function()
-  map("n", "<leader>,", "<cmd>Telescope find_files<CR>")
-  map("n", "<leader>.", "<cmd>Telescope file_browser<CR>")
-  map("n", "<leader>/", "<cmd>Telescope live_grep<CR>")
-
-  map("n", "<leader>;", "<cmd>Telescope buffers<CR>")
-  map("n", "<leader>'", "<cmd>Telescope project<CR>")
-
-  map("n", "<leader>GC", "<cmd>Telescope git_commits<CR>")
-  map("n", "<leader>GCB", "<cmd>Telescope git_bcommits<CR>")
-  map("n", "<leader>GS", "<cmd>Telescope git_status<CR>")
-  map("n", "<leader>GB", "<cmd>Telescope git_branches<CR>")
-
-  map("n", "<leader>tk", "<cmd>Telescope keymaps<CR>")
 end
 
 M.dap = function()
@@ -138,18 +100,4 @@ M.dap = function()
   map("n", "<F10>", '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>')
   map("n", "<F11>", '<cmd>lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>')
 end
-
--- M.cmake = function()
---   map("n", "<leader>cm", function()
---     local commands = { "build_and_debug", "build_and_run", "build_all", "build", "run", "debug", "clean", "configure", "select_target" }
---
---     vim.ui.select(commands, { prompt = "Select CMake action" }, function(command)
---       if not command then
---         return
---       end
---       vim.cmd("CMake " .. command)
---     end)
---   end)
--- end
-
 return M
