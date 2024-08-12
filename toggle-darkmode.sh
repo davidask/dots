@@ -1,16 +1,16 @@
 #!/usr/bin/env sh
 
 # This is stupid
-ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.yml"
+ALACRITTY_CONFIG="$HOME/.config/alacritty/alacritty.toml"
 
-LIGHT="colors: *light"
-DARK="colors: *dark"
+LIGHT="~/.config/alacritty/themes/light.toml"
+DARK="~/.config/alacritty/themes/dark.toml"
 
-function sed_escape() {
+sed_escape() {
   echo "$1" | sed -e 's/[]\/$*.^[]/\\&/g'
 }
 
-function replace() {
+replace() {
   sed -i '' -e "s/$(sed_escape "$1")/$(sed_escape "$2")/g" "$ALACRITTY_CONFIG"
 }
 
@@ -21,3 +21,6 @@ else
   osascript -e "tell app \"System Events\" to tell appearance preferences to set dark mode to false"
   replace "$DARK" "$LIGHT"
 fi
+
+# Reload
+touch ~/.config/alacritty/alacritty.toml

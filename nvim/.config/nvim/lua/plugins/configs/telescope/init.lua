@@ -57,7 +57,7 @@ local options = {
       },
     },
     find_files = {
-      shorten_path = true,
+      path_display = { "truncate" },
       find_command = { "fd", "--type=file", "--exclude=.git", "--strip-cwd-prefix", "--hidden" },
     },
     buffers = {

@@ -3,7 +3,7 @@ vim.api.nvim_create_user_command("ToggleVimDarkMode", function()
 end, {})
 
 vim.api.nvim_create_user_command("ToggleOSDarkMode", function()
-  vim.cmd("!tdm")
+  vim.cmd("silent !tdm")
 end, {})
 
 vim.api.nvim_create_user_command("ToggleDarkMode", function()

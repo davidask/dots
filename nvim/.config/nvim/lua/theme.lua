@@ -32,6 +32,10 @@ require("catppuccin").setup({
   },
 })
 
+require("rose-pine").setup({
+  dark_variant = "moon"
+})
+
 function M.set_color_scheme()
   vim.cmd([[
       let theme = system("defaults read -g AppleInterfaceStyle") 

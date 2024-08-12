@@ -56,6 +56,7 @@ lspconfig.lua_ls.setup({
 
 lspconfig.tsserver.setup({
   capabilities = M.capabilities,
+  root_dir = require("lspconfig.util").root_pattern("tsconfig.json"),
   on_attach = function(client, bufnr)
     client.server_capabilities.document_formatting = false
     client.server_capabilities.document_range_formatting = false
@@ -115,6 +116,11 @@ lspconfig.pyright.setup({
 })
 
 lspconfig.eslint.setup({
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+})
+
+lspconfig.biome.setup({
   on_attach = M.on_attach,
   capabilities = M.capabilities,
 })

@@ -1,14 +1,11 @@
-#!/usr/bin/env fish
-
-rm -f ~/.zcompdump
-chmod -R go-w "$(brew --prefix)/share"
+#!/usr/bin/env zsh
 
 echo "Brewing..."
 brew bundle --no-lock --file ~/.Brewfile --quiet --zap
 
-eval (brew --prefix)/opt/fzf/install \
-  --no-zsh \
+eval $(brew --prefix)/opt/fzf/install \
   --no-bash \
+  --no-fish \
   --key-bindings \
   --completion \
   --no-update-rc
@@ -18,7 +15,4 @@ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --no-
 
 # Alacritty
 defaults write org.alacritty AppleFontSmoothing -int 0
-
-# Fisher
-curl -sL https://git.io/fisher | source && fisher install jorgebucaran/fisher
 

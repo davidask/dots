@@ -19,19 +19,19 @@ opt.fillchars = { eob = " " }
 opt.ignorecase = true
 opt.smartcase = true
 
+opt.scrolloff = 15
+
 -- No mice
 opt.mouse = ""
 
 -- Numbers
 opt.number = true
-opt.relativenumber = true
+opt.relativenumber = false
 opt.numberwidth = 2
 opt.ruler = false
 
 -- disable nvim intro
 opt.shortmess:append "sI"
-
-opt.shell = "/opt/homebrew/bin/fish"
 
 opt.signcolumn = "yes"
 opt.splitbelow = true

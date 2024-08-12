@@ -20,11 +20,20 @@ require("lazy").setup({
   "alvarosevilla95/luatab.nvim",
 
   { "catppuccin/nvim", lazy = false },
+  { "rose-pine/neovim", name = "rose-pine", lazy = false },
 
   {
     "nvim-treesitter/nvim-treesitter",
     build = function()
       require("nvim-treesitter.install").update({ with_sync = true })
+    end,
+  },
+  {
+    "iamcco/markdown-preview.nvim",
+    cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
+    ft = { "markdown" },
+    build = function()
+      vim.fn["mkdp#util#install"]()
     end,
   },
 
@@ -41,6 +50,7 @@ require("lazy").setup({
   },
 
   "tpope/vim-fugitive",
+  "tpope/vim-rhubarb",
   "nvim-lualine/lualine.nvim",
 
   {
@@ -78,6 +88,11 @@ require("lazy").setup({
     config = true,
   },
 
+  {
+    "stevearc/resession.nvim",
+    opts = {},
+  },
+
   -- LSP
   "ray-x/lsp_signature.nvim",
 
@@ -104,10 +119,12 @@ require("lazy").setup({
           },
 
           json = {
+            require("formatter.filetypes.json").biome,
             require("formatter.filetypes.json").prettierd,
           },
 
           jsonc = {
+            require("formatter.filetypes.json").biome,
             require("formatter.filetypes.json").prettierd,
           },
 
@@ -120,7 +137,22 @@ require("lazy").setup({
           },
 
           typescript = {
+            require("formatter.filetypes.json").biome,
             require("formatter.filetypes.typescript").prettierd,
+          },
+
+          typescriptreact = {
+            require("formatter.filetypes.json").biome,
+            require("formatter.filetypes.typescriptreact").prettierd,
+          },
+
+          css = {
+            require("formatter.filetypes.json").biome,
+            require("formatter.filetypes.css").prettierd,
+          },
+
+          sql = {
+            require("formatter.filetypes.sql").pgformat,
           },
 
           ["*"] = {
