@@ -1,6 +1,7 @@
 
 if [[ "$(uname)" == "Darwin" ]]; then
   alias tdm="$HOME/.dotfiles/toggle-darkmode.sh"
+  alias killport='f() { kill $(lsof -t -i:$1) };f'
 
   if [[ "$(uname -m)" == "arm64" ]]; then
     export PATH="/opt/homebrew/bin:$PATH"

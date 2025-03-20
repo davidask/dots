@@ -19,8 +19,22 @@ require("lazy").setup({
   "kyazdani42/nvim-web-devicons",
   "alvarosevilla95/luatab.nvim",
 
-  { "catppuccin/nvim", lazy = false },
-  { "rose-pine/neovim", name = "rose-pine", lazy = false },
+  { "catppuccin/nvim", lazy = false, priority = 1000 },
+
+  {
+    "neanias/everforest-nvim",
+    version = false,
+    lazy = false,
+    priority = 1000,
+  },
+
+  {
+    "dmmulroy/ts-error-translator.nvim",
+
+    config = function()
+      require("ts-error-translator").setup()
+    end,
+  },
 
   {
     "nvim-treesitter/nvim-treesitter",
@@ -40,6 +54,17 @@ require("lazy").setup({
   {
     "folke/todo-comments.nvim",
     dependencies = "nvim-lua/plenary.nvim",
+  },
+
+  {
+    "pwntester/octo.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-telescope/telescope.nvim",
+    },
+    config = function()
+      require("octo").setup()
+    end,
   },
 
   {

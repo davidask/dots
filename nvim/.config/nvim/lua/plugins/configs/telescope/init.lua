@@ -128,3 +128,4 @@ vim.keymap.set("n", "<c-b>", "<cmd>Telescope buffers<cr>", { desc = "Buffer Pick
 vim.keymap.set("n", "<c-f>", "<cmd>Telescope live_grep<cr>", { desc = "File Picker" })
 vim.keymap.set("n", "<c-p>", "<cmd>Telescope find_files<cr>", { desc = "Project picker" })
 vim.keymap.set("n", "<c-e>", "<cmd>Telescope file_browser<cr>", { desc = "File browser" })
+vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Git branches" })

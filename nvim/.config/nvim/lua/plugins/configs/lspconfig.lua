@@ -54,7 +54,7 @@ lspconfig.lua_ls.setup({
   },
 })
 
-lspconfig.tsserver.setup({
+lspconfig.ts_ls.setup({
   capabilities = M.capabilities,
   root_dir = require("lspconfig.util").root_pattern("tsconfig.json"),
   on_attach = function(client, bufnr)

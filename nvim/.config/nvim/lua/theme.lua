@@ -4,17 +4,17 @@ local telescopeBorderless = function(flavor)
   local cp = require("catppuccin.palettes").get_palette(flavor)
 
   return {
-    TelescopeBorder = { fg = cp.surface2, bg = cp.base },
-    TelescopeSelectionCaret = { fg = cp.mauve, bg = cp.crust },
-    TelescopeMatching = { fg = cp.mauve },
-    TelescopeNormal = { bg = cp.base },
+    TelescopeBorder = { fg = cp.mantle, bg = cp.mantle },
+    TelescopeSelectionCaret = { fg = cp.lavender, bg = cp.crust },
+    TelescopeMatching = { fg = cp.lavender },
+    TelescopeNormal = { bg = cp.mantle },
     TelescopeSelection = { fg = cp.text, bg = cp.crust },
     TelescopeMultiSelection = { fg = cp.text, bg = cp.crust },
-    TelescopeTitle = { fg = cp.mauve, bg = cp.base },
-    TelescopePreviewTitle = { fg = cp.mauve, bg = cp.base },
-    TelescopePromptTitle = { fg = cp.mauve, bg = cp.crust },
-    TelescopePromptPrefix = { fg = cp.mauve, bg = cp.crust },
-    TelescopePromptNormal = { fg = cp.mauve, bg = cp.crust },
+    TelescopeTitle = { fg = cp.lavender, bg = cp.mantle },
+    TelescopePreviewTitle = { fg = cp.lavender, bg = cp.base },
+    TelescopePromptTitle = { fg = cp.lavender, bg = cp.crust },
+    TelescopePromptPrefix = { fg = cp.lavender, bg = cp.crust },
+    TelescopePromptNormal = { fg = cp.lavender, bg = cp.crust },
     TelescopePromptBorder = { fg = cp.crust, bg = cp.crust },
   }
 end
@@ -32,13 +32,9 @@ require("catppuccin").setup({
   },
 })
 
-require("rose-pine").setup({
-  dark_variant = "moon"
-})
-
 function M.set_color_scheme()
   vim.cmd([[
-      let theme = system("defaults read -g AppleInterfaceStyle") 
+      let theme = system("defaults read -g AppleInterfaceStyle")
       echom theme
       if theme =~ 'Dark'
           set background=dark

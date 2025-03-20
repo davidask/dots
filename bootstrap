@@ -1,6 +1,6 @@
 #!/usr/bin/env zsh
 
-STOW_FOLDERS="zsh,nvim,git,curl,brew,alacritty,starship,tmux"
+STOW_FOLDERS="zsh,nvim,git,curl,brew,alacritty,starship,tmux,ghostty"
 
 stow -t ~ stow
 

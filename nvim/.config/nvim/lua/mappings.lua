@@ -7,10 +7,6 @@ vim.g.mapleader = " "
 -- use ESC to turn off search highlighting
 vim.keymap.set("n", "<leader><Esc>", "<cmd>noh<cr>", { desc = "Clear highlights" })
 
-vim.keymap.set("n", "<C-A>n", "<cmd>tabnext<CR>", { desc = "Next tab" })
-vim.keymap.set("n", "<C-A>p", "<cmd>tabprev<CR>", { desc = "Previous tab" })
-vim.keymap.set("n", "<C-A>c", "<cmd>tabnew<CR>", { desc = "New tab" })
-
 vim.keymap.set("n", "<C-h>", "<C-w>h", { desc = "Move focus left" })
 vim.keymap.set("n", "<C-l>", "<C-w>l", { desc = "Move focus right" })
 vim.keymap.set("n", "<C-k>", "<C-w>k", { desc = "Move focus up" })
