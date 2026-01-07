@@ -1,7 +1,7 @@
 #!/usr/bin/env zsh
 
 echo "Brewing..."
-brew bundle --no-lock --file ~/.Brewfile --quiet --zap
+brew bundle --file ~/.Brewfile --quiet --zap
 
 eval $(brew --prefix)/opt/fzf/install \
   --no-bash \
@@ -9,10 +9,3 @@ eval $(brew --prefix)/opt/fzf/install \
   --key-bindings \
   --completion \
   --no-update-rc
-
-# Rust
-curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -q -y --no-modify-path
-
-# Alacritty
-defaults write org.alacritty AppleFontSmoothing -int 0
-
