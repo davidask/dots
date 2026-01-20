@@ -1,0 +1,7 @@
+keybinds {
+    normal {
+        bind "Ctrl u" {
+            SwitchToMode "Theme"
+        }
+    }
+}
