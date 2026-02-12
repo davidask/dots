@@ -1,0 +1,18 @@
+[[language]]
+name = "typescript"
+language-servers = [
+  { name = 'biome' },
+  { name = 'typescript-language-server', except-features = ['format'] }
+]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "a.ts"] }
+
+[[language]]
+name = "tsx"
+language-servers = [
+  { name = 'biome' },
+  { name = 'emmet-ls' },
+  { name = 'typescript-language-server', except-features = ['format'] }
+]
+auto-format = true
+formatter = { command = "biome", args = ["format", "--stdin-file-path", "a.tsx"] }

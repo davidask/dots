@@ -1,0 +1,23 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+REPO_ROOT="${0:A:h}/.."
+ZELLIJ_CONFIG="${1:-$REPO_ROOT/zellij/.config/zellij/config.kdl}"
+DARK_THEME="catppuccin-macchiato"
+LIGHT_THEME="catppuccin-latte"
+
+if [[ ! -f "$ZELLIJ_CONFIG" ]]; then
+  echo "Zellij config not found: $ZELLIJ_CONFIG" >&2
+  exit 1
+fi
+
+theme="$LIGHT_THEME"
+if [[ "$(uname)" == "Darwin" ]] && defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+  theme="$DARK_THEME"
+fi
+
+sed -E -i '' "s|^[[:space:]]*theme[[:space:]]+\"[^\"]+\"|theme \"$theme\"|" "$ZELLIJ_CONFIG"
+grep -Eq '^[[:space:]]*theme[[:space:]]+"[^"]+"' "$ZELLIJ_CONFIG" || echo "theme \"$theme\"" >> "$ZELLIJ_CONFIG"
+
+echo "Set Zellij theme to '$theme'."

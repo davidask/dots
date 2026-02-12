@@ -24,6 +24,7 @@ fi
 source ${ZIM_HOME}/init.zsh
 
 export PATH="$HOME/.dbt/bin:$PATH"
+export PATH="$HOME/.dotfiles/bin:$PATH"
 
 alias dotfiles="cd ~/.dotfiles && nvim"
 
@@ -45,3 +46,8 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm end
+export PATH="$HOME/.dbt/bin:$PATH"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
