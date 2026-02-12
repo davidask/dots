@@ -1,13 +1,13 @@
 #!/usr/bin/env zsh
 
-STOW_FOLDERS="zsh,nvim,git,curl,brew,starship,ghostty,zellij"
+STOW_FOLDERS="zsh,nvim,git,curl,brew,starship,ghostty,helix,zellij"
 
 stow -t ~ stow
 
 for folder in $(echo $STOW_FOLDERS | sed "s/,/ /g")
 do
     echo "Stowing $folder"
-    stow --restow $folder
+    stow --restow -vvv $folder
 done
 
 echo "Done."
