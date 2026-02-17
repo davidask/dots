@@ -1,0 +1,42 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+REPO_ROOT="${0:A:h}/.."
+HELIX_CONFIG="${1:-$REPO_ROOT/helix/.config/helix/config.toml}"
+DARK_THEME="catppuccin_macchiato"
+LIGHT_THEME="catppuccin_latte"
+
+if [[ ! -f "$HELIX_CONFIG" ]]; then
+  echo "Helix config not found: $HELIX_CONFIG" >&2
+  exit 1
+fi
+
+theme="$LIGHT_THEME"
+if [[ "$(uname)" == "Darwin" ]] && defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+  theme="$DARK_THEME"
+fi
+
+sed -E -i '' "s|^[[:space:]]*theme[[:space:]]*=[[:space:]]*\"[^\"]+\"|theme = \"$theme\"|" "$HELIX_CONFIG"
+grep -Eq '^[[:space:]]*theme[[:space:]]*=[[:space:]]*"[^"]+"' "$HELIX_CONFIG" || echo "theme = \"$theme\"" >> "$HELIX_CONFIG"
+
+echo "Set Helix theme to '$theme'."
+
+# Ask running Helix instances to reload config so the theme updates immediately.
+if command -v pgrep >/dev/null 2>&1; then
+  updated=0
+  while IFS= read -r pid; do
+    [[ -z "$pid" ]] && continue
+    if kill -USR1 "$pid" 2>/dev/null; then
+      updated=$((updated + 1))
+    fi
+  done < <(pgrep -x hx 2>/dev/null || true)
+
+  if (( updated > 0 )); then
+    echo "Reloaded config in $updated running Helix instance(s)."
+  else
+    echo "No running Helix instances found."
+  fi
+else
+  echo "pgrep not available; skipping live reload for running Helix instances."
+fi

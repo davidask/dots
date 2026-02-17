@@ -1,0 +1,32 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+BIN_DIR="${0:A:h}"
+
+# Sync terminal/editor themes to the current macOS appearance without toggling it.
+if [[ "$(uname)" != "Darwin" ]]; then
+  echo "sync-appearance only supports macOS." >&2
+  exit 1
+fi
+
+nvim_bg="light"
+if defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+  nvim_bg="dark"
+fi
+
+# Keep Zellij and Helix aligned with the current system mode.
+"$BIN_DIR/sync-zellij-theme"
+"$BIN_DIR/sync-helix-theme"
+
+# Broadcast :set bg=... to reachable Neovim RPC sockets.
+updated=0
+while IFS= read -r sock; do
+  nvim --server "$sock" --remote-expr "execute('set bg=$nvim_bg | redraw!')" >/dev/null 2>&1 || continue
+  updated=$((updated + 1))
+done < <(find /tmp /private/tmp /var/folders -type s -name 'nvim.*' 2>/dev/null)
+
+if (( updated > 0 )); then
+  echo "Updated $updated running Neovim instance(s)."
+else
+  echo "No reachable Neovim servers found."
+fi

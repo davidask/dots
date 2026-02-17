@@ -1,9 +1,3 @@
-local present, lspconfig = pcall(require, "lspconfig")
-
-if not present then
-  return
-end
-
 local M = {}
 
 M.on_attach = function(_, bufnr)
@@ -30,12 +24,19 @@ M.capabilities.textDocument.completion.completionItem = {
   },
 }
 
-lspconfig.lua_ls.setup({
-  on_attach = function(client, bufnr)
-    client.server_capabilities.document_formatting = false
-    client.server_capabilities.document_range_formatting = false
-    M.on_attach(client, bufnr)
-  end,
+local function no_format_on_attach(client, bufnr)
+  client.server_capabilities.documentFormattingProvider = false
+  client.server_capabilities.documentRangeFormattingProvider = false
+  M.on_attach(client, bufnr)
+end
+
+local shared = {
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
+}
+
+vim.lsp.config("lua_ls", {
+  on_attach = no_format_on_attach,
   capabilities = M.capabilities,
   settings = {
     Lua = {
@@ -54,78 +55,31 @@ lspconfig.lua_ls.setup({
   },
 })
 
-lspconfig.ts_ls.setup({
+vim.lsp.config("ts_ls", {
   capabilities = M.capabilities,
-  root_dir = require("lspconfig.util").root_pattern("tsconfig.json"),
-  on_attach = function(client, bufnr)
-    client.server_capabilities.document_formatting = false
-    client.server_capabilities.document_range_formatting = false
-    M.on_attach(client, bufnr)
-  end,
+  root_markers = { "tsconfig.json" },
+  on_attach = no_format_on_attach,
 })
 
-lspconfig.sourcekit.setup({
+vim.lsp.config("sourcekit", {
   on_attach = M.on_attach,
   capabilities = M.capabilities,
   filetypes = { "swift", "objective-c", "objective-cpp" },
 })
 
-lspconfig.nginx_language_server.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
+vim.lsp.config("nginx_language_server", shared)
+vim.lsp.config("dockerls", shared)
+vim.lsp.config("cssls", shared)
+vim.lsp.config("cssmodules_ls", shared)
+vim.lsp.config("bashls", shared)
+vim.lsp.config("clangd", shared)
+vim.lsp.config("gopls", shared)
+vim.lsp.config("cmake", shared)
+vim.lsp.config("pyright", shared)
+vim.lsp.config("eslint", shared)
+vim.lsp.config("biome", shared)
 
-lspconfig.dockerls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.cssls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.cssmodules_ls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.bashls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.clangd.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.gopls.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.cmake.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.pyright.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.eslint.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.biome.setup({
-  on_attach = M.on_attach,
-  capabilities = M.capabilities,
-})
-
-lspconfig.yamlls.setup({
+vim.lsp.config("yamlls", {
   on_attach = M.on_attach,
   capabilities = M.capabilities,
   settings = {
@@ -169,6 +123,26 @@ lspconfig.yamlls.setup({
     },
   },
 })
+
+for _, server in ipairs({
+  "lua_ls",
+  "ts_ls",
+  "sourcekit",
+  "nginx_language_server",
+  "dockerls",
+  "cssls",
+  "cssmodules_ls",
+  "bashls",
+  "clangd",
+  "gopls",
+  "cmake",
+  "pyright",
+  "eslint",
+  "biome",
+  "yamlls",
+}) do
+  vim.lsp.enable(server)
+end
 
 local rust_tools = require("rust-tools")
 
