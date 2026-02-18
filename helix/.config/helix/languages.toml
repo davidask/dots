@@ -1,5 +1,5 @@
 [language-server]
-biome = { command = "biome", args = ["lsp-proxy"] }
+biome = { command = "./node_modules/.bin/biome", args = ["lsp-proxy"] }
 
 [[language]]
 name = "javascript"
