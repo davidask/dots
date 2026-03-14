@@ -1,6 +1,6 @@
 local M = {}
 
-local telescopeBorderless = function(flavor)
+local telescope_borderless = function(flavor)
   local cp = require("catppuccin.palettes").get_palette(flavor)
 
   return {
@@ -21,10 +21,10 @@ end
 
 require("catppuccin").setup({
   highlight_overrides = {
-    latte = telescopeBorderless("latte"),
-    frappe = telescopeBorderless("frappe"),
-    macchiato = telescopeBorderless("macchiato"),
-    mocha = telescopeBorderless("mocha"),
+    latte = telescope_borderless("latte"),
+    frappe = telescope_borderless("frappe"),
+    macchiato = telescope_borderless("macchiato"),
+    mocha = telescope_borderless("mocha"),
   },
   background = {
     light = "latte",
@@ -33,16 +33,17 @@ require("catppuccin").setup({
 })
 
 function M.set_color_scheme()
-  vim.cmd([[
-      let theme = system("defaults read -g AppleInterfaceStyle")
-      echom theme
-      if theme =~ 'Dark'
-          set background=dark
-      else
-          set background=light
-      endif
-      colorscheme catppuccin
-    ]])
+  local background = "light"
+
+  if vim.fn.executable("defaults") == 1 then
+    local result = vim.system({ "defaults", "read", "-g", "AppleInterfaceStyle" }, { text = true }):wait()
+    if result.code == 0 and result.stdout:match("Dark") then
+      background = "dark"
+    end
+  end
+
+  vim.o.background = background
+  vim.cmd.colorscheme("catppuccin")
 end
 
 require("lualine").setup({})

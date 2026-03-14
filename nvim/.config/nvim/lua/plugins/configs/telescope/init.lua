@@ -19,18 +19,6 @@ local options = {
         },
       },
     },
-    project = {
-      base_dirs = {
-        {
-          path = "~/Github",
-          max_depth = 3,
-        },
-        {
-          path = "~/Bitbucket",
-          max_depth = 3,
-        },
-      },
-    },
     ["ui-select"] = {
       require("telescope.themes").get_dropdown({}),
     },
@@ -117,15 +105,15 @@ local options = {
 telescope.setup(options)
 
 -- load extensions
-local extensions = { "file_browser", "ui-select", "project", "fzf" }
+local extensions = { "file_browser", "ui-select", "fzf" }
 
 for _, ext in ipairs(extensions) do
   telescope.load_extension(ext)
 end
 
-vim.keymap.set("n", "<c-t>", "<cmd>Telescope project<cr>", { desc = "Live Grep" })
+vim.keymap.set("n", "<c-t>", "<cmd>Telescope oldfiles<cr>", { desc = "Recent files" })
 vim.keymap.set("n", "<c-b>", "<cmd>Telescope buffers<cr>", { desc = "Buffer Picker" })
-vim.keymap.set("n", "<c-f>", "<cmd>Telescope live_grep<cr>", { desc = "File Picker" })
-vim.keymap.set("n", "<c-p>", "<cmd>Telescope find_files<cr>", { desc = "Project picker" })
+vim.keymap.set("n", "<c-f>", "<cmd>Telescope live_grep<cr>", { desc = "Live Grep" })
+vim.keymap.set("n", "<c-p>", "<cmd>Telescope find_files<cr>", { desc = "File Picker" })
 vim.keymap.set("n", "<c-e>", "<cmd>Telescope file_browser<cr>", { desc = "File browser" })
 vim.keymap.set("n", "<leader>gb", "<cmd>Telescope git_branches<cr>", { desc = "Git branches" })

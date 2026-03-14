@@ -25,6 +25,9 @@ vim.cmd([[
 
 vim.api.nvim_create_autocmd({ "BufWritePost" }, {
   callback = function()
-    require("lint").try_lint()
+    local ok, lint = pcall(require, "lint")
+    if ok then
+      lint.try_lint()
+    end
   end,
 })

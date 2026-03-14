@@ -4,25 +4,7 @@ M.on_attach = function(_, bufnr)
   require("mappings").lspconfig(bufnr)
 end
 
-M.capabilities = vim.lsp.protocol.make_client_capabilities()
-
-M.capabilities.textDocument.completion.completionItem = {
-  documentationFormat = { "markdown", "plaintext" },
-  snippetSupport = true,
-  preselectSupport = true,
-  insertReplaceSupport = true,
-  labelDetailsSupport = true,
-  deprecatedSupport = true,
-  commitCharactersSupport = true,
-  tagSupport = { valueSet = { 1 } },
-  resolveSupport = {
-    properties = {
-      "documentation",
-      "detail",
-      "additionalTextEdits",
-    },
-  },
-}
+M.capabilities = require("blink.cmp").get_lsp_capabilities()
 
 local function no_format_on_attach(client, bufnr)
   client.server_capabilities.documentFormattingProvider = false
@@ -65,6 +47,11 @@ vim.lsp.config("sourcekit", {
   on_attach = M.on_attach,
   capabilities = M.capabilities,
   filetypes = { "swift", "objective-c", "objective-cpp" },
+})
+
+vim.lsp.config("rust_analyzer", {
+  on_attach = M.on_attach,
+  capabilities = M.capabilities,
 })
 
 vim.lsp.config("nginx_language_server", shared)
@@ -128,6 +115,7 @@ for _, server in ipairs({
   "lua_ls",
   "ts_ls",
   "sourcekit",
+  "rust_analyzer",
   "nginx_language_server",
   "dockerls",
   "cssls",
@@ -143,14 +131,5 @@ for _, server in ipairs({
 }) do
   vim.lsp.enable(server)
 end
-
-local rust_tools = require("rust-tools")
-
-rust_tools.setup({
-  server = {
-    on_attach = M.on_attach,
-    standalone = false,
-  },
-})
 
 return M

@@ -2,8 +2,6 @@ local utils = require("utils")
 
 local map = utils.map
 
-vim.g.mapleader = " "
-
 -- use ESC to turn off search highlighting
 vim.keymap.set("n", "<leader><Esc>", "<cmd>noh<cr>", { desc = "Clear highlights" })
 
@@ -29,7 +27,9 @@ vim.keymap.set("n", "<leader>tdm", '<cmd>exec &bg=="light"? "set bg=dark" : "set
 local M = {}
 
 M.formatter = function()
-  vim.keymap.set("n", "<leader>fm", "<cmd>Format<CR>", { desc = "Format" })
+  vim.keymap.set("n", "<leader>fm", function()
+    require("conform").format({ async = true, lsp_format = "fallback" })
+  end, { desc = "Format buffer" })
 end
 
 M.lspconfig = function(bufnr)
@@ -82,18 +82,4 @@ M.lspconfig = function(bufnr)
   end, opt)
 end
 
-M.dap = function()
-  map("n", "<F1>", '<cmd>lua require("dapui").toggle()<CR>')
-  map("n", "<F2>", '<cmd>lua require("dap").continue()<CR>')
-  map("n", "<F3>", '<cmd>lua require("dap").repl.open()<CR>')
-  map("n", "<F4>", '<cmd>lua require("dap").run_last()<CR>')
-
-  map("n", "<F5>", '<cmd>lua require("dap").step_over()<CR>')
-  map("n", "<F6>", '<cmd>lua require("dap").step_into()<CR>')
-  map("n", "<F7>", '<cmd>lua require("dap").step_out()<CR>')
-
-  map("n", "<F9>", '<cmd>lua require("dap").toggle_breakpoint()<CR>')
-  map("n", "<F10>", '<cmd>lua require("dap").set_breakpoint(vim.fn.input("Breakpoint condition: "))<CR>')
-  map("n", "<F11>", '<cmd>lua require("dap").set_breakpoint(nil, nil, vim.fn.input("Log point message: "))<CR>')
-end
 return M

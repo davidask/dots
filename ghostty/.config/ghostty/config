@@ -1,3 +1,4 @@
 theme = dark:Catppuccin Macchiato,light:Catppuccin Latte
 cursor-style = block
 macos-option-as-alt = false
+font-family = JetBrainsMono Nerd Font

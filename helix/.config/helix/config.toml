@@ -2,7 +2,39 @@ theme = "catppuccin_latte"
 
 [editor]
 line-number = "relative"
-mouse = false
+mouse = true
+default-yank-register = "+"
 
 [editor.file-picker]
 hidden = false
+
+
+[editor.cursor-shape]
+insert = "bar"
+normal = "block"
+select = "underline"
+
+[editor.lsp]
+display-inlay-hints = false
+display-messages = true
+
+[editor.inline-diagnostics]
+cursor-line = "warning"
+
+[keys.normal]
+C-v = [
+    ":write-all",
+    ":new",
+    ":insert-output lazygit",
+    ":buffer-close!",
+    ":redraw",
+    ":reload-all"
+]
+
+
+# # Some nice Helix stuff
+C-h = "select_prev_sibling"
+C-j = "shrink_selection"
+C-k = "expand_selection"
+C-l = "select_next_sibling"
+
