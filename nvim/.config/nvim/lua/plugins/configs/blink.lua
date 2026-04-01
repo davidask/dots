@@ -6,9 +6,10 @@ end
 
 blink.setup({
   keymap = {
-    preset = "enter",
+    preset = "default",
     ["<C-b>"] = { "scroll_documentation_up", "fallback" },
     ["<C-f>"] = { "scroll_documentation_down", "fallback" },
+    ["<CR>"] = { "accept", "fallback" },
   },
   appearance = {
     nerd_font_variant = "mono",
@@ -21,9 +22,16 @@ blink.setup({
     },
     menu = {
       border = "rounded",
+      auto_show = true,
     },
     ghost_text = {
       enabled = false,
+    },
+    list = {
+      selection = {
+        preselect = false,
+        auto_insert = false,
+      },
     },
   },
   signature = {

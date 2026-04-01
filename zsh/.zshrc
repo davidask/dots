@@ -26,7 +26,7 @@ source ${ZIM_HOME}/init.zsh
 export PATH="$HOME/.dbt/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
-export EDITOR="hx"
+export EDITOR="nvim"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 

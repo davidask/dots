@@ -11,3 +11,4 @@ if [[ "$(uname)" == "Darwin" ]]; then
 
   export PATH="$HOME/.cargo/bin:$PATH"
 fi
+. "$HOME/.cargo/env"
