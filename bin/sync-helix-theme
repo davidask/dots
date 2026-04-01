@@ -4,8 +4,8 @@ set -euo pipefail
 
 REPO_ROOT="${0:A:h}/.."
 HELIX_CONFIG="${1:-$REPO_ROOT/helix/.config/helix/config.toml}"
-DARK_THEME="catppuccin_macchiato"
-LIGHT_THEME="catppuccin_latte"
+DARK_THEME="tokyonight"
+LIGHT_THEME="tokyonight_day"
 
 if [[ ! -f "$HELIX_CONFIG" ]]; then
   echo "Helix config not found: $HELIX_CONFIG" >&2
