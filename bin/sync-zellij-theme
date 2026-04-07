@@ -4,8 +4,8 @@ set -euo pipefail
 
 REPO_ROOT="${0:A:h}/.."
 ZELLIJ_CONFIG="${1:-$REPO_ROOT/zellij/.config/zellij/config.kdl}"
-DARK_THEME="tokyo-night"
-LIGHT_THEME="tokyo-night-light"
+DARK_THEME="catppuccin-mocha"
+LIGHT_THEME="catppuccin-latte"
 
 if [[ ! -f "$ZELLIJ_CONFIG" ]]; then
   echo "Zellij config not found: $ZELLIJ_CONFIG" >&2

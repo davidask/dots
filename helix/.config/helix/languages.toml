@@ -1,6 +1,6 @@
 [language-server]
 tailwindcss-ls = { command = "tailwindcss-language-server", args = ["--stdio"] }
-biome = { command = "./node_modules/.bin/biome", args = ["lsp-proxy"] }
+biome = { command = "npx", args = ["--no-install", "biome", "lsp-proxy"] }
 
 [[language]]
 name = "javascript"
@@ -25,3 +25,9 @@ language-servers = [ { name = "typescript-language-server", except-features = [ 
 [[language]]
 name = "json"
 language-servers = [ { name = "vscode-json-language-server", except-features = [ "format" ] }, "biome" ]
+
+[[language]]
+name = "swift"
+auto-format = true
+language-servers = [ { name = "sourcekit-lsp", except-features = [ "format" ] } ]
+formatter = { command = "swiftformat", args = ["--quiet"] }

@@ -1,4 +1,4 @@
-theme = dark:TokyoNight Night,light:TokyoNight Day
+theme = dark:Catppuccin Mocha,light:Catppuccin Latte
 cursor-style = block
 macos-option-as-alt = false
 font-family = JetBrainsMono Nerd Font

@@ -12,11 +12,14 @@ function M.set_color_scheme()
 
   vim.o.background = background
   
-  require("tokyonight").setup({
-    style = "night",
+  require("catppuccin").setup({
+    background = {
+      light = "latte",
+      dark = "mocha",
+    },
   })
   
-  vim.cmd.colorscheme("tokyonight")
+  vim.cmd.colorscheme("catppuccin")
 end
 
 require("lualine").setup({})

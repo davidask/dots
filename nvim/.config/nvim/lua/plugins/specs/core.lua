@@ -3,7 +3,8 @@ return {
   "nvim-tree/nvim-web-devicons",
   "alvarosevilla95/luatab.nvim",
   {
-    "folke/tokyonight.nvim",
+    "catppuccin/nvim",
+    name = "catppuccin",
     lazy = false,
     priority = 1000,
   },

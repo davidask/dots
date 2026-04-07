@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+
+# xc-run - Build and run Apple platform projects on a Simulator from the terminal
+
+set -e
+
+# Check if xcode-select is pointing to CommandLineTools instead of Xcode
+if xcode-select -p | grep -q "CommandLineTools"; then
+    echo "❌ Error: Your Mac is currently using the lightweight Command Line Tools instead of Xcode."
+    echo "The 'xcodebuild' command requires the full Xcode application to work."
+    echo "To fix this, please run the following command and try again:"
+    echo ""
+    echo "    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer"
+    echo ""
+    exit 1
+fi
+
+WATCH_MODE=0
+SHOW_LOGS=1
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        --watch) WATCH_MODE=1 ;;
+        --no-logs) SHOW_LOGS=0 ;;
+        *) SCHEME=$1 ;;
+    esac
+    shift
+done
+
+if [ -z "$SCHEME" ]; then
+    echo "Usage: xc-run [--watch] [--no-logs] <SchemeName>"
+    echo "Hint: You can find schemes using 'xcodebuild -list'"
+    exit 1
+fi
+
+WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)
+
+BUILD_CMD="xcodebuild"
+
+if [ -n "$WORKSPACE" ]; then
+    BUILD_CMD="$BUILD_CMD -workspace '$WORKSPACE'"
+elif [ -n "$PROJECT" ]; then
+    BUILD_CMD="$BUILD_CMD -project '$PROJECT'"
+else
+    echo "Error: No .xcworkspace or .xcodeproj found in current directory."
+    exit 1
+fi
+
+# Find the first booted simulator
+DEVICE_ID=$(xcrun simctl list devices | grep "(Booted)" | head -n 1 | grep -oE "[0-9A-F]{8}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{4}-[0-9A-F]{12}")
+
+if [ -z "$DEVICE_ID" ]; then
+    echo "Error: No Apple Simulator is currently booted."
+    echo "Please open Simulator.app or run 'xcrun simctl boot <device_id>'"
+    exit 1
+fi
+
+build_app() {
+    echo "🚀 Building scheme '$SCHEME' for simulator ($DEVICE_ID)..."
+
+    # Build using xcbeautify if available
+    if command -v xcbeautify &> /dev/null; then
+        # We need to disable set -e temporarily because xcbeautify can mask the return code if we pipe directly,
+        # but bash's set -o pipefail handles this.
+        set -o pipefail
+        eval "$BUILD_CMD -scheme '$SCHEME' -destination 'id=$DEVICE_ID' build | xcbeautify"
+        set +o pipefail
+    else
+        eval "$BUILD_CMD -scheme '$SCHEME' -destination 'id=$DEVICE_ID' build"
+    fi
+}
+
+launch_app() {
+    # Assuming build was successful, find the built .app
+    APP_DIR=$(eval "$BUILD_CMD -scheme '$SCHEME' -destination 'id=$DEVICE_ID' -showBuildSettings" | grep -m 1 "TARGET_BUILD_DIR" | grep -oE "\/.*")
+    APP_NAME=$(eval "$BUILD_CMD -scheme '$SCHEME' -destination 'id=$DEVICE_ID' -showBuildSettings" | grep -m 1 "FULL_PRODUCT_NAME" | awk '{print $3}')
+
+    APP_PATH="$APP_DIR/$APP_NAME"
+    BUNDLE_ID=$(defaults read "$APP_PATH/Info.plist" CFBundleIdentifier)
+
+    echo "📲 Installing app to simulator..."
+    xcrun simctl install "$DEVICE_ID" "$APP_PATH"
+
+    if [ "$SHOW_LOGS" -eq 1 ]; then
+        echo "🏃‍♂️ Launching app ($BUNDLE_ID) and attaching to logs..."
+        exec xcrun simctl launch --console "$DEVICE_ID" "$BUNDLE_ID"
+    else
+        echo "🏃‍♂️ Launching app ($BUNDLE_ID)..."
+        xcrun simctl launch --terminate-running-process "$DEVICE_ID" "$BUNDLE_ID"
+        echo "✅ Done!"
+    fi
+}
+
+if [ "$WATCH_MODE" -eq 1 ]; then
+    echo "👀 Watch mode enabled! Monitoring for Swift/Obj-C changes..."
+    
+    LAST_CHANGE=0
+    SIM_PID=""
+    
+    # Cleanup trap
+    trap '[[ -n "$SIM_PID" ]] && kill -TERM "$SIM_PID" 2>/dev/null; echo "Exiting watch mode."' EXIT
+    
+    while true; do
+        if git rev-parse --is-inside-work-tree >/dev/null 2>&1; then
+            FILES=$(git ls-files | grep -E '\.(swift|h|m|mm)$' || true)
+        else
+            FILES=$(find . -type d \( -name ".*" -o -name "build" -o -name "DerivedData" -o -name "*.xcodeproj" -o -name "*.xcworkspace" \) -prune -o -type f \( -name "*.swift" -o -name "*.h" -o -name "*.m" -o -name "*.mm" \) -print)
+        fi
+        
+        if [ -z "$FILES" ]; then
+            echo "❌ Error: No Swift or Objective-C files found to watch."
+            exit 1
+        fi
+        
+        # Get newest modification time across all tracked files
+        NEWEST_TIME=$(echo "$FILES" | tr '\n' '\0' | xargs -0 stat -f "%m" | sort -nr | head -n 1)
+        
+        if [ "$NEWEST_TIME" -gt "$LAST_CHANGE" ]; then
+            # Debounce: wait a tiny bit to allow Helix's swiftformat auto-save to finish writing
+            sleep 0.5
+            
+            clear
+            
+            if [ -n "$SIM_PID" ]; then
+                kill -TERM "$SIM_PID" 2>/dev/null || true
+                wait "$SIM_PID" 2>/dev/null || true
+            fi
+            
+            # 1. Build synchronously
+            # If the build fails, we don't launch, we just wait for the next file change.
+            if build_app; then
+                # 2. Build finished! Update the time so we ignore anything touched BY the build
+                LAST_CHANGE=$(date +%s)
+                
+                # 3. Launch in the background and capture PID
+                launch_app &
+                SIM_PID=$!
+            else
+                echo "❌ Build failed. Waiting for changes..."
+                LAST_CHANGE=$(date +%s)
+            fi
+        fi
+        sleep 1
+    done
+else
+    # Standard non-watch run
+    build_app
+    launch_app
+fi

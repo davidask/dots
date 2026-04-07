@@ -1,0 +1,98 @@
+#!/usr/bin/env bash
+
+# xc-init - Generate LSP configuration (buildServer.json) for sourcekit-lsp
+
+set -e
+
+# Check if xcode-select is pointing to CommandLineTools instead of Xcode
+if xcode-select -p | grep -q "CommandLineTools"; then
+    echo "❌ Error: Your Mac is currently using the lightweight Command Line Tools instead of Xcode."
+    echo "The 'xcodebuild' command requires the full Xcode application to work."
+    echo "To fix this, please run the following command and try again:"
+    echo ""
+    echo "    sudo xcode-select -s /Applications/Xcode.app/Contents/Developer"
+    echo ""
+    exit 1
+fi
+
+WORKSPACE=$(find . -maxdepth 1 -name "*.xcworkspace" | head -n 1)
+PROJECT=$(find . -maxdepth 1 -name "*.xcodeproj" | head -n 1)
+
+if [ -n "$WORKSPACE" ]; then
+    TARGET="-workspace '$WORKSPACE'"
+elif [ -n "$PROJECT" ]; then
+    TARGET="-project '$PROJECT'"
+else
+    echo "Error: No .xcworkspace or .xcodeproj found in current directory."
+    exit 1
+fi
+
+SCHEME=$1
+
+if [ -z "$SCHEME" ]; then
+    echo "🔍 Finding available schemes..."
+    
+    # Run xcodebuild -list
+    echo "⚙️ Running 'xcodebuild -list' to find schemes..."
+    XCODEBUILD_OUT=$(eval "xcodebuild -list $TARGET -json" 2>&1) || true
+    
+    # Try parsing as JSON first
+    if echo "$XCODEBUILD_OUT" | grep -q '^{'; then
+        SCHEMES=$(echo "$XCODEBUILD_OUT" | jq -r '.project.schemes[]?, .workspace.schemes[]?' 2>/dev/null || true)
+    else
+        # Fallback to text parsing
+        SCHEMES=$(echo "$XCODEBUILD_OUT" | awk '/Schemes:/{flag=1; next} /^[[:space:]]*$/{flag=0} flag {gsub(/^[[:space:]]+|[[:space:]]+$/, "", $0); print $0}')
+    fi
+    
+    if [ -z "$SCHEMES" ]; then
+        echo "❌ Could not find any schemes."
+        echo "--- xcodebuild output ---"
+        echo "$XCODEBUILD_OUT"
+        echo "-------------------------"
+        echo "Please make sure your Xcode project is valid and has shared schemes."
+        echo "Usage: xc-init <SchemeName>"
+        exit 1
+    fi
+
+    # Count the number of schemes found
+    SCHEME_COUNT=$(echo "$SCHEMES" | wc -l | tr -d ' ')
+
+    if [ "$SCHEME_COUNT" -eq 1 ]; then
+        SCHEME=$(echo "$SCHEMES" | tr -d '\n')
+        echo "💡 Found only one scheme: '$SCHEME'. Automatically selecting it."
+    else
+        echo "🤔 Multiple schemes found. Which one would you like to configure for this project?"
+        PS3="👉 Enter the number of your choice (or 0 to cancel): "
+        
+        # Load the schemes into a bash array compatibly with macOS default bash 3.2
+        SCHEME_ARRAY=()
+        while IFS= read -r line; do
+            [ -n "$line" ] && SCHEME_ARRAY+=("$line")
+        done <<< "$SCHEMES"
+        
+        # Force the select menu to print one item per line
+        COLUMNS=1
+        select opt in "${SCHEME_ARRAY[@]}"; do
+            if [ "$REPLY" -eq 0 ] 2>/dev/null; then
+                echo "Canceling."
+                exit 0
+            elif [ -n "$opt" ]; then
+                SCHEME=$opt
+                break
+            else
+                echo "❌ Invalid selection. Please enter a valid number from the list above."
+            fi
+        done
+    fi
+fi
+
+if [ -z "$SCHEME" ]; then
+    echo "❌ No scheme selected. Aborting."
+    exit 1
+fi
+
+echo "⚙️ Configuring xcode-build-server for scheme: '$SCHEME'..."
+eval "xcode-build-server config $TARGET -scheme '$SCHEME'"
+
+echo "✅ Success! 'buildServer.json' created."
+echo "You can now open your editor, and sourcekit-lsp will understand your project."
