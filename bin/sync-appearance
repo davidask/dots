@@ -17,6 +17,7 @@ fi
 # Keep Zellij and Helix aligned with the current system mode.
 "$BIN_DIR/sync-zellij-theme"
 "$BIN_DIR/sync-helix-theme"
+"$BIN_DIR/sync-opencode-theme"
 
 # Broadcast new colorscheme to reachable Neovim RPC sockets.
 updated=0

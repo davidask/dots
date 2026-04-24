@@ -33,7 +33,6 @@ require("todo-comments").setup()
 require("nvim_comment").setup()
 require("plugins.configs.blink")
 
-require("plugins.configs.lsp_signature")
 require("plugins.configs.mason")
 require("plugins.configs.mason-lspconfig")
 require("plugins.configs.lspconfig")

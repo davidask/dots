@@ -1,6 +1,8 @@
 [language-server]
 tailwindcss-ls = { command = "tailwindcss-language-server", args = ["--stdio"] }
 biome = { command = "npx", args = ["--no-install", "biome", "lsp-proxy"] }
+basedpyright = { command = "basedpyright-langserver", args = ["--stdio"] }
+sqlls = { command = "sql-language-server", args = ["up", "--method", "stdio"] }
 
 [[language]]
 name = "javascript"
@@ -31,3 +33,14 @@ name = "swift"
 auto-format = true
 language-servers = [ { name = "sourcekit-lsp", except-features = [ "format" ] } ]
 formatter = { command = "swiftformat", args = ["--quiet"] }
+
+[[language]]
+name = "python"
+auto-format = true
+language-servers = [ "basedpyright" ]
+
+[[language]]
+name = "sql"
+auto-format = true
+language-servers = [ "sqlls" ]
+formatter = { command = "sqlfluff", args = ["format", "-", "--disable-progress-bar"] }

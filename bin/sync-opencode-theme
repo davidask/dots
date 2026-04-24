@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+REPO_ROOT="${0:A:h}/.."
+OPENCODE_TUI_CONFIG="${1:-$REPO_ROOT/opencode/.config/opencode/tui.json}"
+DARK_THEME="catppuccin-mocha"
+LIGHT_THEME="catppuccin-latte"
+
+if [[ ! -f "$OPENCODE_TUI_CONFIG" ]]; then
+  echo "OpenCode TUI config not found: $OPENCODE_TUI_CONFIG" >&2
+  exit 1
+fi
+
+theme="$LIGHT_THEME"
+if [[ "$(uname)" == "Darwin" ]] && defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+  theme="$DARK_THEME"
+fi
+
+sed -E -i '' "s/\"theme\"[[:space:]]*:[[:space:]]*\"[^\"]+\"/\"theme\": \"$theme\"/" "$OPENCODE_TUI_CONFIG"
+
+echo "Set OpenCode theme to '$theme'."

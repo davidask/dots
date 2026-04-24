@@ -1,0 +1,80 @@
+#!/usr/bin/env bash
+
+# xc-clean: Safely clean Xcode DerivedData and associated caches.
+# Default mode is dry-run. Use --force to proceed with deletion.
+
+set -e
+
+DRY_RUN=true
+CLEAN_ALL=false
+FORCE=false
+
+# Helper: Print usage
+usage() {
+    echo "Usage: ./bin/xc-clean [options]"
+    echo "Options:"
+    echo "  -f, --force    Execute deletion"
+    echo "  -a, --all      Include Archives, Caches, and DeviceSupport in addition to DerivedData"
+    echo "  -h, --help     Show this help"
+    exit 1
+}
+
+# Parse arguments
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -f|--force) FORCE=true; DRY_RUN=false ;;
+        -a|--all) CLEAN_ALL=true ;;
+        -h|--help) usage ;;
+        *) echo "Unknown parameter: $1"; usage ;;
+    esac
+    shift
+done
+
+# Targets
+TARGETS=("$HOME/Library/Developer/Xcode/DerivedData")
+if [ "$CLEAN_ALL" = true ]; then
+    TARGETS+=("$HOME/Library/Developer/Xcode/Archives")
+    TARGETS+=("$HOME/Library/Caches/com.apple.dt.Xcode")
+    TARGETS+=("$HOME/Library/Developer/Xcode/iOS DeviceSupport")
+fi
+
+echo "--- xc-clean ---"
+if [ "$DRY_RUN" = true ]; then
+    echo "Mode: DRY RUN (No files will be deleted)"
+else
+    echo "Mode: FORCE (Files WILL be deleted)"
+fi
+
+# Show files to be cleaned
+TOTAL_SIZE=0
+for dir in "${TARGETS[@]}"; do
+    if [ -d "$dir" ]; then
+        SIZE=$(du -sh "$dir" 2>/dev/null | cut -f1)
+        echo "[Found] $dir ($SIZE)"
+        TOTAL_SIZE=$((TOTAL_SIZE + $(du -sk "$dir" 2>/dev/null | cut -f1)))
+    else
+        echo "[Missing] $dir"
+    fi
+done
+
+if [ "$DRY_RUN" = true ]; then
+    echo "Total potential space saved: $((TOTAL_SIZE / 1024))MB"
+    echo "Run with --force to execute deletion."
+    exit 0
+fi
+
+# Confirmation countdown
+echo "!!! DELETION IN 5 SECONDS !!!"
+echo "Press Ctrl+C to cancel."
+sleep 5
+
+# Execute Cleanup
+echo "Cleaning up..."
+for dir in "${TARGETS[@]}"; do
+    if [ -d "$dir" ]; then
+        echo "Removing $dir..."
+        rm -rf "$dir"
+    fi
+done
+
+echo "Cleanup complete."

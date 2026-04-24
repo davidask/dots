@@ -45,8 +45,9 @@ return {
           typescript = { "biome", "prettierd", stop_after_first = true },
           typescriptreact = { "biome", "prettierd", stop_after_first = true },
           css = { "biome", "prettierd", stop_after_first = true },
-          sql = { "pg_format" },
+          sql = { "sqlfluff" },
           rust = { "rustfmt", lsp_format = "fallback" },
+          swift = { "swiftformat" },
           ["_"] = { "trim_whitespace" },
         },
         default_format_opts = {

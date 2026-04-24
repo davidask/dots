@@ -23,7 +23,7 @@ fi
 # Initialize modules.
 source ${ZIM_HOME}/init.zsh
 
-export PATH="$HOME/.dbt/bin:$PATH"
+export PATH="$HOME/.dbt-env/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
 export EDITOR="nvim"
@@ -52,3 +52,9 @@ export PATH="$HOME/.dbt/bin:$PATH"
 export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 export PATH="$HOME/.local/bin:$PATH"
+# Added by dbt Fusion extension (ensure dbt binary dir on PATH)
+if [[ ":$PATH:" != *":/Users/davidask/.local/bin:"* ]]; then
+  export PATH=/Users/davidask/.local/bin:"$PATH"
+fi
+# Added by dbt Fusion extension
+alias dbtf=/Users/davidask/.local/bin/dbt

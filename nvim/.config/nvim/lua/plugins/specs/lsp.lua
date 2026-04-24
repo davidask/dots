@@ -8,7 +8,10 @@ return {
       },
     },
   },
-  "ray-x/lsp_signature.nvim",
+  {
+    "pmizio/typescript-tools.nvim",
+    dependencies = { "nvim-lua/plenary.nvim", "neovim/nvim-lspconfig" },
+  },
   "williamboman/mason.nvim",
   "williamboman/mason-lspconfig.nvim",
   {
@@ -18,6 +21,7 @@ return {
         yaml = { "cfn_lint" },
         go = { "golangcilint" },
         sh = { "shellcheck" },
+        sql = { "sqlfluff" },
       }
     end,
   },

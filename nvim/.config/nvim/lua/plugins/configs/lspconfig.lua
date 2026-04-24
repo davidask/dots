@@ -12,6 +12,23 @@ local function no_format_on_attach(client, bufnr)
   M.on_attach(client, bufnr)
 end
 
+require("typescript-tools").setup {
+  on_attach = no_format_on_attach,
+  capabilities = M.capabilities,
+  settings = {
+    tsserver_file_preferences = {
+      includeInlayParameterNameHints = "all",
+      includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+      includeInlayFunctionParameterTypeHints = true,
+      includeInlayVariableTypeHints = true,
+      includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+      includeInlayPropertyDeclarationTypeHints = true,
+      includeInlayFunctionLikeReturnTypeHints = true,
+      includeInlayEnumMemberValueHints = true,
+    },
+  },
+}
+
 local shared = {
   on_attach = M.on_attach,
   capabilities = M.capabilities,
@@ -53,29 +70,6 @@ end
 vim.lsp.config("lua_ls", {
   on_attach = no_format_on_attach,
   capabilities = M.capabilities,
-  settings = {
-    Lua = {
-      diagnostics = {
-        globals = { "vim" },
-      },
-      workspace = {
-        library = {
-          [vim.fn.expand("$VIMRUNTIME/lua")] = true,
-          [vim.fn.expand("$VIMRUNTIME/lua/vim/lsp")] = true,
-        },
-        maxPreload = 100000,
-        preloadFileSize = 10000,
-      },
-    },
-  },
-})
-
-vim.lsp.config("ts_ls", {
-  capabilities = M.capabilities,
-  on_attach = no_format_on_attach,
-  root_dir = function(bufnr, on_dir)
-    on_dir(root_dir(bufnr, js_root_markers))
-  end,
 })
 
 vim.lsp.config("sourcekit", {
@@ -97,14 +91,17 @@ vim.lsp.config("bashls", shared)
 vim.lsp.config("clangd", shared)
 vim.lsp.config("gopls", shared)
 vim.lsp.config("cmake", shared)
-vim.lsp.config("pyright", shared)
+vim.lsp.config("basedpyright", shared)
+vim.lsp.config("sqlls", shared)
 vim.lsp.config("eslint", vim.tbl_extend("force", shared, {
+  on_attach = no_format_on_attach,
   root_dir = function(bufnr, on_dir)
     on_dir(root_dir(bufnr, eslint_root_markers))
   end,
 }))
 
 vim.lsp.config("biome", vim.tbl_extend("force", shared, {
+  on_attach = no_format_on_attach,
   root_dir = function(bufnr, on_dir)
     on_dir(root_dir(bufnr, biome_root_markers))
   end,
@@ -157,7 +154,6 @@ vim.lsp.config("yamlls", {
 
 for _, server in ipairs({
   "lua_ls",
-  "ts_ls",
   "sourcekit",
   "rust_analyzer",
   "nginx_language_server",
@@ -168,7 +164,8 @@ for _, server in ipairs({
   "clangd",
   "gopls",
   "cmake",
-  "pyright",
+  "basedpyright",
+  "sqlls",
   "eslint",
   "biome",
   "yamlls",

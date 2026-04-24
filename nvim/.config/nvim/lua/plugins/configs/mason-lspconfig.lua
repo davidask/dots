@@ -5,11 +5,9 @@ if not present then
 end
 
 mason_lspconfig.setup({
-  -- ensure_installed = {
-  --   "lua-language-server",
-  --   "typescript-language-server",
-  --   "eslint-lsp",
-  --   "clangd",
-  --   "cfn-lint",
-  -- },
+  ensure_installed = {
+    "basedpyright",
+    "sqlls",
+  },
+  automatic_enable = false,
 })

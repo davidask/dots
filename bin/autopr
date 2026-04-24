@@ -1,0 +1,125 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+# Initialize empty string for reviewers
+REVIEWERS=""
+
+# Parse arguments for reviewers
+while [[ "$#" -gt 0 ]]; do
+    case $1 in
+        -r|--reviewer)
+            if [[ -n "$2" ]]; then
+                REVIEWERS="$REVIEWERS --reviewer $2"
+                shift 2
+            else
+                echo "Error: Argument for $1 is missing" >&2
+                exit 1
+            fi
+            ;;
+        -h|--help)
+            echo "Usage: autopr [options]"
+            echo ""
+            echo "Stages all changes, analyzes them to generate a branch name (if on master) and commit message,"
+            echo "commits the changes, pushes the branch, and creates a PR with gh."
+            echo ""
+            echo "Options:"
+            echo "  -r, --reviewer <handle>  Request review from <handle>. Can be used multiple times."
+            echo "  -h, --help               Show this help message"
+            exit 0
+            ;;
+        *)
+            echo "Unknown option: $1" >&2
+            echo "Use --help for usage." >&2
+            exit 1
+            ;;
+    esac
+done
+
+echo "📦 Staging all changes..."
+git add -A
+
+# Check if there's anything to commit
+if git diff --staged --quiet; then
+    echo "❌ No changes to commit."
+    exit 0
+fi
+
+# Get current branch name
+INITIAL_BRANCH=$(git branch --show-current)
+
+if [[ -z "$INITIAL_BRANCH" ]]; then
+    echo "❌ Could not determine current branch. Are you in a detached HEAD state?"
+    exit 1
+fi
+
+echo "🤖 Asking opencode to analyze changes..."
+
+# Define the prompt for opencode
+PROMPT="Analyze the staged git changes. Output ONLY a valid JSON object with no markdown formatting, no backticks, and no extra text. The JSON object must contain two keys:
+1. 'branch_name': a concise, strict kebab-case string describing the changes.
+2. 'commit_message': a full conventional commit message, including a title and a detailed body explaining the changes. DO NOT wrap the output in a markdown block."
+
+# Capture the raw output from opencode
+# We use --pure and --log-level ERROR to minimize extra output.
+RAW_OUTPUT=$(opencode run "$PROMPT" --pure --log-level ERROR)
+
+# Use python to extract values from the JSON string.
+# jq has parsing issues with raw output across different environments.
+# Python's json module is robust and built-in on macOS.
+BRANCH_NAME=$(python3 -c "
+import json, sys, re
+try:
+    content = sys.stdin.read()
+    # Find the JSON object boundaries
+    match = re.search(r'\{.*\}', content, re.DOTALL)
+    if match:
+        data = json.loads(match.group(0))
+        print(data.get('branch_name', ''))
+except Exception as e:
+    sys.exit(1)
+" <<< "$RAW_OUTPUT" 2>/dev/null || echo "")
+
+COMMIT_MESSAGE=$(python3 -c "
+import json, sys, re
+try:
+    content = sys.stdin.read()
+    # Find the JSON object boundaries
+    match = re.search(r'\{.*\}', content, re.DOTALL)
+    if match:
+        data = json.loads(match.group(0))
+        print(data.get('commit_message', ''))
+except Exception as e:
+    sys.exit(1)
+" <<< "$RAW_OUTPUT" 2>/dev/null || echo "")
+
+
+if [[ -z "$BRANCH_NAME" ]] || [[ -z "$COMMIT_MESSAGE" ]]; then
+    echo "❌ Failed to parse JSON output from opencode."
+    echo "Raw output was:"
+    echo "$RAW_OUTPUT"
+    exit 1
+fi
+
+# Handle branching if on master or main
+if [[ "$INITIAL_BRANCH" == "master" ]] || [[ "$INITIAL_BRANCH" == "main" ]]; then
+    echo "🌿 Currently on '$INITIAL_BRANCH'. Creating new branch '$BRANCH_NAME'..."
+    git checkout -b "$BRANCH_NAME"
+    CURRENT_BRANCH="$BRANCH_NAME"
+else
+    CURRENT_BRANCH="$INITIAL_BRANCH"
+fi
+
+echo "💾 Committing changes..."
+# Use echo piped to git commit -F - to properly handle multi-line commit messages
+echo "$COMMIT_MESSAGE" | git commit -F -
+
+echo "🚀 Pushing branch '$CURRENT_BRANCH' to origin..."
+git push -u origin "$CURRENT_BRANCH"
+
+echo "📝 Creating Pull Request..."
+# We use eval here so that the REVIEWERS string (which contains spaces and flags)
+# is properly evaluated by the shell as arguments to the gh command.
+eval "gh pr create --fill $REVIEWERS"
+
+echo "✅ Done!"
