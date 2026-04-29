@@ -17,6 +17,9 @@ if [[ "$(uname)" == "Darwin" ]] && defaults read -g AppleInterfaceStyle 2>/dev/n
   theme="$DARK_THEME"
 fi
 
-sed -E -i '' "s/\"theme\"[[:space:]]*:[[:space:]]*\"[^\"]+\"/\"theme\": \"$theme\"/" "$OPENCODE_TUI_CONFIG"
+tmp_file=$(mktemp)
+sed -E "s/\"theme\"[[:space:]]*:[[:space:]]*\"[^\"]+\"/\"theme\": \"$theme\"/" "$OPENCODE_TUI_CONFIG" > "$tmp_file"
+cat "$tmp_file" > "$OPENCODE_TUI_CONFIG"
+rm "$tmp_file"
 
 echo "Set OpenCode theme to '$theme'."

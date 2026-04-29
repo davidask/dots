@@ -4,14 +4,6 @@
     "linear": {
       "type": "remote",
       "url": "https://mcp.linear.app/mcp"
-    },
-    "slack": {
-      "type": "remote",
-      "url": "https://mcp.slack.com/mcp"
-    },
-    "github": {
-      "type": "remote",
-      "url": "https://api.githubcopilot.com/mcp/"
     }
   }
 }
