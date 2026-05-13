@@ -1,0 +1,4 @@
+[projects."github.com/dbt-capital/frontend2"]
+approved-commands = [
+    "pnpm install",
+]

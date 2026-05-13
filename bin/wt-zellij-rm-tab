@@ -1,0 +1,22 @@
+#!/usr/bin/env zsh
+# Parallel Productivity Workflow
+# Automatically cleans up the spawned Zellij tab when the 
+# associated worktree is merged or removed via 'wt remove'.
+# Usage: wt-zellij-rm-tab <tab-name>
+
+TAB_NAME=$1
+
+# Ensure we have a tab name
+if [[ -z "$TAB_NAME" ]]; then
+    exit 0
+fi
+
+# Only attempt to close if the tab actually exists.
+# We use a more robust check that handles potential whitespace.
+if zellij action query-tab-names | grep -ix "$TAB_NAME" > /dev/null; then
+    # Focus the tab first, then close it.
+    # Note: go-to-tab-name is case-insensitive in newer Zellij versions, 
+    # but we'll try to match whatever we found.
+    zellij action go-to-tab-name "$TAB_NAME"
+    zellij action close-tab
+fi

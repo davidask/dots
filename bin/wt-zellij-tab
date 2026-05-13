@@ -1,0 +1,28 @@
+#!/usr/bin/env zsh
+# Parallel Productivity Workflow
+# This script powers the "spawn" behavior by ensuring each worktree 
+# gets exactly one dedicated Zellij tab, focusing it if it already exists.
+# Usage: wt-zellij-tab <tab-name> <cwd> <branch> <default-branch>
+
+TAB_NAME=$1
+CWD=$2
+BRANCH=$3
+DEFAULT_BRANCH=$4
+
+if [[ -z "$TAB_NAME" ]]; then
+    exit 1
+fi
+
+# Skip tab creation for the default branch (launcher context)
+if [[ "$BRANCH" == "$DEFAULT_BRANCH" ]]; then
+    exit 0
+fi
+
+# Check if a tab with this name already exists (case-insensitive)
+if zellij action query-tab-names | grep -ix "$TAB_NAME" > /dev/null; then
+    zellij action go-to-tab-name "$TAB_NAME"
+else
+    # Create new tab with our custom layout
+    # Note: Ensure 'worktree' layout is in your zellij layout search path
+    zellij action new-tab --cwd "$CWD" --name "$TAB_NAME" --layout worktree
+fi

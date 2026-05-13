@@ -1,0 +1,22 @@
+# Parallel Productivity Workflow:
+# [switch] cd = false ensures the current tab remains a stable "launcher".
+# The [post-switch] hook then "spawns" a dedicated Zellij tab for the worktree.
+# Managed by GNU Stow
+
+worktree-path = "{{ repo_path }}/../{{ repo }}.{{ branch | sanitize }}"
+
+[switch]
+# Don't change the directory of the current shell; the hook will handle tab creation
+cd = false
+
+[post-switch]
+# Create or focus a Zellij tab for the current worktree
+# We pass the branch name and default branch name to skip tab creation for the launcher context
+zellij = "wt-zellij-tab {{ repo }}:{{ branch | sanitize }} {{ worktree_path }} {{ branch | sanitize }} {{ default_branch | sanitize }}"
+
+[post-remove]
+# Close the associated Zellij tab when removing a worktree
+close_tab = "wt-zellij-rm-tab {{ repo }}:{{ branch | sanitize }}"
+
+[step.copy-ignored]
+exclude = [".cache/", ".turbo/"]
