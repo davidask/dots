@@ -1,28 +1,35 @@
 [language-server]
+oxlint = { command = "npx", args = ["oxlint", "--lsp"] }
+oxfmt = { command = "npx", args = ["oxfmt", "--write", "--stdin-filepath"] }
 tailwindcss-ls = { command = "tailwindcss-language-server", args = ["--stdio"] }
 biome = { command = "npx", args = ["--no-install", "biome", "lsp-proxy"] }
 basedpyright = { command = "basedpyright-langserver", args = ["--stdio"] }
 sqlls = { command = "sql-language-server", args = ["up", "--method", "stdio"] }
 
+
 [[language]]
 name = "javascript"
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome", "oxlint" ]
 auto-format = true
+formatter = { command = "sh", args = ["-c", "npx oxfmt --stdin-filepath ${FILENAME:-file.tsx}"] }
 
 [[language]]
 name = "typescript"
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome", "oxlint" ]
 auto-format = true
+formatter = { command = "sh", args = ["-c", "npx oxfmt --stdin-filepath ${FILENAME:-file.tsx}"] }
 
 [[language]]
 name = "tsx"
 auto-format = true
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome", "oxlint" ]
+formatter = { command = "sh", args = ["-c", "npx oxfmt --stdin-filepath ${FILENAME:-file.tsx}"] }
 
 [[language]]
 name = "jsx"
 auto-format = true
-language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome" ]
+language-servers = [ { name = "typescript-language-server", except-features = [ "format" ] }, "tailwindcss-ls", "biome", "oxlint" ]
+formatter = { command = "sh", args = ["-c", "npx oxfmt --stdin-filepath ${FILENAME:-file.tsx}"] }
 
 [[language]]
 name = "json"

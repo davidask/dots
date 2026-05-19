@@ -85,12 +85,17 @@
 	sort = -committerdate
 
 [core]
-
-	# Use custom `.gitignore` and `.gitattributes`.
 	excludesfile = ~/.gitignore
 	attributesfile = ~/.gitattributes
+	pager = delta
+
+[delta]
+	navigate = true
+	light = false
+	side-by-side = true
 
 	# Treat spaces before tabs and all kinds of trailing whitespace as an error.
+
 	# [default] trailing-space: looks for spaces at the end of a line
 	# [default] space-before-tab: looks for spaces before tabs at the beginning of a line
 	whitespace = space-before-tab,-indent-with-non-tab,trailing-space
@@ -171,9 +176,6 @@
 [user]
 	name = David Ask
 	email = david@formbound.com
-[core]
-	excludesfile = ~/.gitignore
-	editor = nvim
 [pull]
   ff = only
 [init]

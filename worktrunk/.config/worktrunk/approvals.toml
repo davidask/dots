@@ -1,3 +1,10 @@
+[projects."github.com/dbt-capital/env"]
+approved-commands = [
+    "bin/dbt-env check",
+    "bin/dbt-env ci",
+    "bin/dbt-env up",
+]
+
 [projects."github.com/dbt-capital/frontend2"]
 approved-commands = [
     "pnpm install",

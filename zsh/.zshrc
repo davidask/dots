@@ -59,3 +59,10 @@ if [[ ":$PATH:" != *":/Users/davidask/.local/bin:"* ]]; then
 fi
 # Added by dbt Fusion extension
 alias dbtf=/Users/davidask/.local/bin/dbt
+
+# DBT Env - persistent environment variables
+if [ -f "$HOME/.dbt-env/.env" ]; then
+  set +u
+  source "$HOME/.dbt-env/.env"
+  set -u
+fi

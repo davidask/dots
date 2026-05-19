@@ -1,0 +1,11 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+BAT_CONFIG="$HOME/.config/bat/config"
+
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+    sed -i '' 's/^--theme=.*/--theme="Catppuccin Mocha"/' "$BAT_CONFIG"
+else
+    sed -i '' 's/^--theme=.*/--theme="Catppuccin Latte"/' "$BAT_CONFIG"
+fi

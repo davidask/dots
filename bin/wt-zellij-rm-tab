@@ -11,12 +11,10 @@ if [[ -z "$TAB_NAME" ]]; then
     exit 0
 fi
 
-# Only attempt to close if the tab actually exists.
-# We use a more robust check that handles potential whitespace.
-if zellij action query-tab-names | grep -ix "$TAB_NAME" > /dev/null; then
-    # Focus the tab first, then close it.
-    # Note: go-to-tab-name is case-insensitive in newer Zellij versions, 
-    # but we'll try to match whatever we found.
+# Loop to close all tabs with this name to handle potential duplicates
+while zellij action query-tab-names | grep -ix "$TAB_NAME" > /dev/null; do
     zellij action go-to-tab-name "$TAB_NAME"
     zellij action close-tab
-fi
+    # Small sleep to ensure Zellij processes the command
+    sleep 0.1
+done
