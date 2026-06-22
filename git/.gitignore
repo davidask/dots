@@ -203,3 +203,5 @@ Utilities/Docker/*.tar.gz
 /build
 *.pyc
 .docc-build
+
+**/.claude/settings.local.json

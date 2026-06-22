@@ -89,9 +89,11 @@
 	attributesfile = ~/.gitattributes
 	pager = delta
 
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
+
 [delta]
 	navigate = true
-	light = false
 	side-by-side = true
 
 	# Treat spaces before tabs and all kinds of trailing whitespace as an error.
@@ -111,6 +113,7 @@
 	# Speed up commands involving untracked files such as `git status`.
 	# https://git-scm.com/docs/git-update-index#_untracked_cache
 	untrackedCache = true
+	features = catppuccin-latte
 
 [color]
 
@@ -182,3 +185,7 @@
 	defaultBranch = master
 [credential]
 	helper = store
+[include]
+	path = ~/.config/delta/catppuccin.gitconfig
+[checkout]
+	defaultRemote = origin

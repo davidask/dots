@@ -6,3 +6,7 @@
 - If it can be said in 5 words, don't use 10.
 - Kill preamble. Kill postamble. Just answer.
 - Never fabricate references (issue numbers, ticket IDs, etc). If you don't have it, ask or leave it out.
+
+## Tooling
+- Prefer `rg` (ripgrep) over `grep` for content searches.
+- Prefer `fd` over `find` for file searches.

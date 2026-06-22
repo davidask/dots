@@ -1,0 +1,20 @@
+layout {
+    floating_panes {
+        pane {
+            name "Terminal"
+            x "0%"
+            y "0%"
+            width "70%"
+            height "100%"
+            focus true
+        }
+
+        pane command="opencode" {
+            name "OpenCode"
+            x "70%"
+            y "0%"
+            width "30%"
+            height "100%"
+        }
+    }
+}

@@ -23,6 +23,3 @@ else
   osascript -e 'tell application "System Events" to tell appearance preferences to set dark mode to true'
   echo "Switched to dark mode."
 fi
-
-# Sync all tool themes/backgrounds to the new system mode.
-"$BIN_DIR/sync-appearance"

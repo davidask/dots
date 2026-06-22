@@ -21,9 +21,10 @@ if [[ ! ${ZIM_HOME}/init.zsh -nt ${ZDOTDIR:-${HOME}}/.zimrc ]]; then
 fi
 
 # Initialize modules.
+fpath=(~/.grok/completions/zsh $fpath)
 source ${ZIM_HOME}/init.zsh
 
-export PATH="$HOME/.dbt-env/bin:$PATH"
+# export PATH="$HOME/.dbt-env/bin:$PATH"
 export PATH="$HOME/.dotfiles/bin:$PATH"
 
 export EDITOR="hx"
@@ -31,6 +32,7 @@ export EDITOR="hx"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 eval "$(starship init zsh)"
+eval "$(direnv hook zsh)"
 
 eval "$(fnm env --use-on-cd)"
 eval "$(zoxide init zsh)"
@@ -60,9 +62,26 @@ fi
 # Added by dbt Fusion extension
 alias dbtf=/Users/davidask/.local/bin/dbt
 
-# DBT Env - persistent environment variables
-if [ -f "$HOME/.dbt-env/.env" ]; then
-  set +u
-  source "$HOME/.dbt-env/.env"
-  set -u
+# Automatically set THEME_MODE for OpenCode based on macOS appearance
+if [[ "$(uname)" == "Darwin" ]]; then
+  if defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+    export THEME_MODE="dark"
+  else
+    export THEME_MODE="light"
+  fi
 fi
+
+# Wrapper function to update active shell environment on toggle
+sync-appearance() {
+  command sync-appearance
+  if [[ "$(uname)" == "Darwin" ]]; then
+    if defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
+      export THEME_MODE="dark"
+    else
+      export THEME_MODE="light"
+    fi
+  fi
+}
+# >>> grok installer >>>
+export PATH="$HOME/.grok/bin:$PATH"
+# <<< grok installer <<<

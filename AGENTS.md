@@ -1,35 +1,21 @@
 # Agent Instructions for davidask/.dotfiles
 
-This repository uses [GNU Stow](https://www.gnu.org/software/stow/) to manage dotfiles. Most top-level directories are symlinked to the home directory.
+This repository uses [GNU Stow](https://www.gnu.org/software/stow/) to manage dotfiles.
 
-## Architecture & Management
-
-- **Management**: `stow` links directories to `$HOME`. Settings are defined in `stow/.stowrc`.
-- **Bootstrap**: Run `./bootstrap` to link or restow all components.
-- **Dependencies**: Run `./install` to install Homebrew dependencies via `.Brewfile`.
+## Management & Setup
+- **Bootstrap**: Run `./bootstrap` to link or restow all components. NEVER manually symlink files.
+- **Dependencies**: Run `./install` to sync Homebrew dependencies.
 
 ## Toolchain & Workflow
-
-### Apple Platform Development
-Custom scripts in `bin/` provide a CLI-first workflow for Apple platforms:
-- `xc-init <Scheme>`: Generates `buildServer.json` for `sourcekit-lsp`. Required for Neovim/Helix LSP support in Swift projects.
-- `xc-run <Scheme> [--watch]`: Builds and runs the app on the first booted simulator.
-- `xc-clean [--force]`: Cleans Xcode `DerivedData` and caches.
-
-### Editors
-- **Neovim**: Configured in `nvim/.config/nvim`. Uses `lazy.nvim` for plugin management.
-- **Helix**: Configured in `helix/`.
-
-### Shell & Environment
-- **Zsh**: Uses `zimfw`. Configuration in `zsh/`.
+- **Apple Development**: 
+  - `xc-init <Scheme>`: Generates `buildServer.json` for `sourcekit-lsp`. **Mandatory** for Neovim/Helix LSP support in Swift.
+  - `xc-run <Scheme> [--watch]`: Builds/runs on the first booted simulator.
+  - `xc-clean`: Cleans `DerivedData` and caches.
 - **Themes**: Use `bin/sync-*-theme` scripts to synchronize appearance across Ghostty, Helix, Zellij, and OpenCode.
-
-## Key Paths
-- `nvim/.config/nvim`: Neovim configuration.
-- `opencode/.config/opencode`: OpenCode specialized environment and configuration.
-- `zsh/`: Zsh startup files (`.zshrc`, `.zshenv`, `.zimrc`).
+- **OpenCode**: Configuration and specialized agent/skill logic reside in `.opencode/`.
+- **Agents**: Agent skills and configuration in `~/.agents/` are stowed via the `agents` package.
 
 ## Constraints
-- **Avoid Manual Symlinks**: Always use `stow` or the `./bootstrap` script.
-- **Path Resolution**: When editing, remember that files in the repo are often nested (e.g., `nvim/.config/nvim/init.lua` becomes `~/.config/nvim/init.lua`).
-- **Binary Scripts**: Prefer using scripts in `bin/` for project-specific operations (theme syncing, Apple builds).
+- **Path Resolution**: Files in the repo are often nested (e.g., `nvim/.config/nvim/init.lua` is linked to `~/.config/nvim/init.lua`). Always check target paths relative to `$HOME`.
+- **Scripts**: Prefer binary scripts in `bin/` for specialized tasks over manual tool execution.
+- **Git**: Never commit autonomously; always ask the user for confirmation before performing git commit operations.

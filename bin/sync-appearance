@@ -14,11 +14,11 @@ if defaults read -g AppleInterfaceStyle 2>/dev/null | grep -qi '^Dark$'; then
   nvim_bg="dark"
 fi
 
-# Keep Zellij, Helix, and OpenCode aligned with the current system mode.
+# Keep Zellij and Helix aligned with the current system mode.
 "$BIN_DIR/sync-zellij-theme"
 "$BIN_DIR/sync-helix-theme"
 "$BIN_DIR/sync-bat-theme"
-"$BIN_DIR/sync-opencode-theme"
+"$BIN_DIR/sync-delta-theme"
 
 # Broadcast new colorscheme to reachable Neovim RPC sockets.
 updated=0

@@ -1,0 +1,13 @@
+#!/usr/bin/env zsh
+
+set -euo pipefail
+
+GIT_CONFIG="$HOME/.config/git/config"
+
+if [[ "$(defaults read -g AppleInterfaceStyle 2>/dev/null)" == "Dark" ]]; then
+    git config --file "$GIT_CONFIG" --replace-all delta.features "catppuccin-mocha"
+    echo "Set delta theme to dark (Catppuccin Mocha)."
+else
+    git config --file "$GIT_CONFIG" --replace-all delta.features "catppuccin-latte"
+    echo "Set delta theme to light (Catppuccin Latte)."
+fi
