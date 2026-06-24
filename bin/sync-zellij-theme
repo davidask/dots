@@ -20,4 +20,11 @@ fi
 sed -E -i '' "s|^[[:space:]]*theme[[:space:]]+\"[^\"]+\"|theme \"$theme\"|" "$ZELLIJ_CONFIG"
 grep -Eq '^[[:space:]]*theme[[:space:]]+"[^"]+"' "$ZELLIJ_CONFIG" || echo "theme \"$theme\"" >> "$ZELLIJ_CONFIG"
 
+# Push theme to running Zellij sessions
+action="set-light-theme"
+[[ "$theme" == "$DARK_THEME" ]] && action="set-dark-theme"
+while IFS= read -r session; do
+  ZELLIJ_SESSION_NAME="$session" zellij action "$action" 2>/dev/null || true
+done < <(zellij list-sessions -s 2>/dev/null)
+
 echo "Set Zellij theme to '$theme'."
